@@ -8,7 +8,7 @@ A simple kanban for multiple personal projects.
 
 ## API Resources
 
-  - [GET /users]
+  - [GET /users](#get-users)
   - [GET /users/[id]]
   - [GET /users/[id]/kanbans]
   - [GET /users/[id]/kanbans/[id]/
