@@ -106,7 +106,7 @@ Response:
         ]
     }
 
-#### GET /users/:id
+#### <a name="get-user"></a>GET /users/:id
 
 Response:
 
