@@ -262,3 +262,102 @@ Delete kanban :kanban_id from user :id
     }
 
 ### TASKS
+
+#### <a name="post-tasks"></a>POST /users/:id/kanbans/:kanban_id/tasks
+
+Create a task in kanban :kanban_id of user :id
+
+    {
+      "text": "Write the abstract",
+      "position": "0",
+      "column": "backlog"
+    }
+
+#### <a name="get-tasks"></a>GET /users/:id/kanbans/:kanban_id/tasks
+
+Get all tasks from kanban :kanban_id from user :id
+
+    {
+      "text": "write the abstract",
+      "dateCreated": "31/08/2014",
+      "position": "0",
+      "column": "backlog"
+    },
+    {
+      "text": "meet supervisor",
+      "dateCreated": "31/08/2014",
+      "position": "1",
+      "column": "backlog"
+    },
+    {
+      "text": "find a topic",
+      "dateCreated": "31/08/2014",
+      "dateEnd": "01/09/2014"
+      "position": "0",
+      "column": "done"
+    },
+    {
+      "text": "install latex",
+      "dateCreated": "31/08/2014",
+      "position": "0",
+      "column": "to do"
+    },
+    {
+      "text": "book lab",
+      "dateCreated": "31/08/2014",
+      "position": "0",
+      "column": "doing"
+    },
+    {
+      "text": "book lab",
+      "dateCreated": "17/08/2014",
+      "dateEnd": "24/08/2014"
+      "position": "0",
+      "column": "archive"
+    }
+    
+
+#### <a name="get-completed-tasks"></a>GET /users/:id/completedtasks
+
+Get all completed tasks from user :id
+
+    {
+      "text": "find a topic",
+      "dateCreated": "31/08/2014",
+      "dateEnd": "01/09/2014"
+      "position": "0",
+      "column": "done"
+    },
+    {
+      "text": "book lab",
+      "dateCreated": "17/08/2014",
+      "dateEnd": "24/08/2014"
+      "position": "0",
+      "column": "archive"
+    }
+
+#### <a name="put-task"></a>PUT /users/:id/kanbans/:kanban_id/tasks/:task_id
+
+Update task :task_id from kanban :kanban_id from user :id
+
+    {
+      "text": "write the abstract",
+      "dateCreated": "31/08/2014",
+      "position": "1",
+      "column": "to do"
+    }
+
+#### <a name="delete-tasks"></a>DELETE /users/:id/tasks
+
+Delete all tasks from user :id
+
+#### <a name="delete-task"></a>DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id
+
+Delete task :task_id from kanban :kanban_id from user :id
+
+    {
+      "text": "meet supervisor",
+      "dateCreated": "31/08/2014",
+      "position": "1",
+      "column": "backlog"
+    }
