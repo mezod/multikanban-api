@@ -59,10 +59,11 @@ Stores and updates information about users' kanban board's tasks.
 
 #### POST /users
 
-Create a new user:
+Create a new user.
+
+Request:
 
   {
-     
       "username" : "my_username",
       "password" : "my_password",
       "registered": "01/09/2014",
@@ -71,10 +72,12 @@ Create a new user:
       "numberTasks" : "0",
       "numberCompletedTasks": "0"
   }
+  
+
 
 #### GET /users
 
-Response body:
+Response:
 
     {
         "metadata": {
@@ -101,4 +104,15 @@ Response body:
             },
 
         ]
+    }
+
+#### GET /users/:id
+
+Response:
+
+    {
+        "id": "1",
+        "nickname": "mezod",
+        "registered": "31/08/2014",
+        "numberkanbans": "7",
     }
