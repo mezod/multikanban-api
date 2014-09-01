@@ -105,13 +105,8 @@ Create a new user.
 Request:
 
     {
-      "username" : "my_username",
+      "username" : "mezod",
       "password" : "my_password",
-      "registered": "01/09/2014",
-     
-      "numberKanbans" : "0",
-      "numberTasks" : "0",
-      "numberCompletedTasks": "0"
     }
   
 #### GET /users
@@ -129,19 +124,19 @@ Response:
                 "id": "1",
                 "nickname": "mezod",
                 "registered": "31/08/2014",
-                "numberkanbans": "7",
+                "numberKanbans": "7",
             },
             {
                 "id": "2",
                 "nickname": "cowboycoder",
                 "registered": "31/08/2014",
-                "numberkanbans": "3",
+                "numberKanbans": "3",
             },
             {
                 "id": "3",
                 "nickname": "gravitysrainbow",
                 "registered": "31/08/2014",
-                "numberkanbans": "4",
+                "numberKanbans": "4",
             },
         ]
     }
@@ -156,7 +151,7 @@ Response:
         "id": "1",
         "nickname": "mezod",
         "registered": "31/08/2014",
-        "numberkanbans": "7",
+        "numberKanbans": "7",
     }
     
 #### <a name="put-user"></a>PUT /users/:id
@@ -169,7 +164,7 @@ Response:
         "id": "1",
         "nickname": "mezod",
         "registered": "31/08/2014",
-        "numberkanbans": "8",
+        "numberKanbans": "8",
     }
     
 #### <a name="delete-user"></a>DELETE /users/:id
@@ -184,3 +179,86 @@ Response:
         "registered": "31/08/2014",
         "numberkanbans": "7",
     }
+
+### KANBANS
+
+#### <a name="post-kanbans"></a>POST /users/:id/kanbans
+
+Create a kanban for user :id
+
+    {
+        "title": "Summer trip",
+        "position": "0"
+    }
+
+#### <a name="get-kanbans"></a>GET /users/:id/kanbans
+
+Get all kanbans from user :id
+
+    {
+        "title": "Summer trip",
+        "dateCreated": "01/09/2014",
+        "lastEdited": "01/09/2014",
+        "position": "0",
+        "numberTasks": "3",
+        "numberCompletedTasks": "1"
+    },
+    {
+        "title": "Personal blog",
+        "dateCreated": "31/08/2014",
+        "lastEdited": "01/09/2014",
+        "position": "1",
+        "numberTasks": "13",
+        "numberCompletedTasks": "4"
+    },
+    {
+        "title": "Thesis",
+        "dateCreated": "31/09/2014",
+        "lastEdited": "01/09/2014",
+        "position": "2",
+        "numberTasks": "23",
+        "numberCompletedTasks": "12"
+    }
+
+#### <a name="get-kanban"></a>GET /users/:id/kanbans/:kanban_id
+
+Get kanban :kanban_id from user :id
+
+    {
+        "title": "Thesis",
+        "dateCreated": "31/09/2014",
+        "lastEdited": "01/09/2014",
+        "position": "2",
+        "numberTasks": "23",
+        "numberCompletedTasks": "12"
+    }
+
+#### <a name="put-kanban"></a>PUT /users/:id/kanbans/:kanban_id
+
+Update kanban :kanban_id from user :id
+
+Request:
+
+    {
+        "title": "Master's Thesis",
+        "position": "2",
+    }
+
+#### <a name="delete-kanbans"></a>DELETE /users/:id/kanbans
+
+Delete all kanbans from user :id
+
+#### <a name="delete-kanban"></a>DELETE /users/:id/kanbans/:kanban_id
+
+Delete kanban :kanban_id from user :id
+
+    {
+        "title": "Thesis",
+        "dateCreated": "31/09/2014",
+        "lastEdited": "01/09/2014",
+        "position": "2",
+        "numberTasks": "23",
+        "numberCompletedTasks": "12"
+    }
+
+### TASKS
