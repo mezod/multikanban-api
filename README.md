@@ -63,8 +63,6 @@ Stores and updates information about users' kanban board's tasks.
 Get app stats; total number of users, kanban boards, tasks and completed tasks for the app
 
 Response:
-
-  
   
     {
       "numberUsers" : "12",
@@ -79,11 +77,11 @@ Get stats for user :id; number of kanban boards, tasks and completed tasks
 
 Response:
 
-  {
-    "numberKanbans" : "6",
-    "numberTasks" : "86",
-    "numberCompletedTasks": "57"
-  }
+    {
+      "numberKanbans" : "6",
+      "numberTasks" : "86",
+      "numberCompletedTasks": "57"
+    }
 
 #### <a name="get-kanban-stats"></a>GET /kanbans/:kanban_id/stats
 
@@ -93,10 +91,10 @@ Completed tasks are the sum of the "done" and "archive" columns of the kanban bo
 
 Response:
 
-  {
+    {
       "numberTasks" : "24",
       "numberCompletedTasks": "11"
-  }
+    }
 
 ### USERS
 
@@ -106,7 +104,7 @@ Create a new user.
 
 Request:
 
-  {
+    {
       "username" : "my_username",
       "password" : "my_password",
       "registered": "01/09/2014",
@@ -114,10 +112,8 @@ Request:
       "numberKanbans" : "0",
       "numberTasks" : "0",
       "numberCompletedTasks": "0"
-  }
+    }
   
-
-
 #### GET /users
 
 Get all users.
