@@ -62,13 +62,14 @@ Stores and updates information about users' kanban board's tasks.
 Create a new user:
 
   {
-     "username" : "my_username",
-     "password" : "my_password",
-     "registered": "01/09/2014",
      
-     "numberKanbans" : "0",
-     "numberTasks" : "0",
-     "numberCompletedTasks": "0"
+      "username" : "my_username",
+      "password" : "my_password",
+      "registered": "01/09/2014",
+     
+      "numberKanbans" : "0",
+      "numberTasks" : "0",
+      "numberCompletedTasks": "0"
   }
 
 #### GET /users
