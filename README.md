@@ -116,3 +116,25 @@ Response:
         "registered": "31/08/2014",
         "numberkanbans": "7",
     }
+    
+#### <a name="put-user"></a>PUT /users/:id
+
+Response:
+
+    {
+        "id": "1",
+        "nickname": "mezod",
+        "registered": "31/08/2014",
+        "numberkanbans": "8",
+    }
+    
+#### <a name="delete-user"></a>DELETE /users/:id
+
+Response:
+
+    {
+        "id": "1",
+        "nickname": "mezod",
+        "registered": "31/08/2014",
+        "numberkanbans": "7",
+    }
