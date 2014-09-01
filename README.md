@@ -65,7 +65,6 @@ Get app stats; total number of users, kanban boards, tasks and completed tasks f
 Response:
 
   {
-  
       "numberUsers" : "12",
       "numberKanbans" : "67",
       "numberTasks" : "489",
@@ -79,7 +78,6 @@ Get stats for user :id; number of kanban boards, tasks and completed tasks
 Response:
 
   {
-      
       "numberKanbans" : "6",
       "numberTasks" : "86",
       "numberCompletedTasks": "57"
@@ -94,7 +92,6 @@ Completed tasks are the sum of the "done" and "archive" columns of the kanban bo
 Response:
 
   {
-      
       "numberTasks" : "24",
       "numberCompletedTasks": "11"
   }
@@ -108,7 +105,6 @@ Create a new user.
 Request:
 
   {
-      
       "username" : "my_username",
       "password" : "my_password",
       "registered": "01/09/2014",
