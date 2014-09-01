@@ -33,7 +33,15 @@ A simple kanban for multiple personal projects.
   - [PUT /users/[id]/kanbans/[id]/tasks/[id]]
   - [DELETE /users/[id]/kanbans/[id]/tasks/[id]]
 
-
+* I need a call to retrieve the total number of:
+ - users
+ - kanbans
+ - kanbans per user
+ - tasks
+ - tasks per user
+ - completed tasks (done + archive)
+ - completed tasks (done + archive) per user
+ 
 
 #### GET /users
 
