@@ -8,14 +8,34 @@ A simple kanban for multiple personal projects.
 
 ## API Resources
 
+### USERS
+
+  - [POST /users]
   - [GET /users](#get-users)
   - [GET /users/[id]]
-  - [GET /users/[id]/kanbans]
-  - [GET /users/[id]/kanbans/[id]/
-  - [GET /users/[id]/kanbans/[id]/tasks
-  - [POST /users/[id]]
+  - [PUT /users/[id]]
+  - [DELETE /users/[id]]
 
-### GET /users
+  
+### KANBANS
+  
+  - [POST /users/[id]/kanbans]
+  - [GET /users/[id]/kanbans]
+  - [GET /users/[id]/kanbans/[id]]
+  - [PUT /users/[id]/kanbans/[id]]
+  - [DELETE /users/[id]/kanbans/[id]]
+
+### TASKS
+
+  - [POST /users/[id]/kanbans/[id]/tasks]
+  - [GET /users/[id]/kanbans/[id]/tasks]
+  - [GET /users/[id]/tasks]
+  - [PUT /users/[id]/kanbans/[id]/tasks/[id]]
+  - [DELETE /users/[id]/kanbans/[id]/tasks/[id]]
+
+
+
+#### GET /users
 
 Example: http://multikanban.com/api/users.json
 
