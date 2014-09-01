@@ -16,7 +16,7 @@ Stores and updates information about users of the app.
 | ---- | --------------- |
 | [POST /users](#post-users) | Create a user |
 | [GET /users](#get-users) | Get all users |
-| [GET /users/:id](#get-user) | Get a user data |
+| [GET /users/:id](#get-user) | Get user :id data |
 | [PUT /users/:id](#put-user) | Update user's data |
 | [DELETE /users/:id](#delete-user) | Delete user |
   
@@ -77,6 +77,8 @@ Request:
 
 #### GET /users
 
+Get all users.
+
 Response:
 
     {
@@ -108,6 +110,8 @@ Response:
 
 #### <a name="get-user"></a>GET /users/:id
 
+Get user :id data.
+
 Response:
 
     {
@@ -119,6 +123,8 @@ Response:
     
 #### <a name="put-user"></a>PUT /users/:id
 
+Update user :id data.
+
 Response:
 
     {
@@ -129,6 +135,8 @@ Response:
     }
     
 #### <a name="delete-user"></a>DELETE /users/:id
+
+Delete user :id.
 
 Response:
 
