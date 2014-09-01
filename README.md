@@ -10,6 +10,8 @@ A simple kanban for multiple personal projects.
 
 ### USERS
 
+Stores and updates information about users of the app.
+
 | Endpoint | Description |
 | ---- | --------------- |
 | [POST /users](#post-users) | Create a user |
@@ -19,6 +21,8 @@ A simple kanban for multiple personal projects.
 | [DELETE /users/:id](#delete-user) | Delete user |
   
 ### KANBANS
+
+Stores and updates information about users' kanban boards.
   
 | Endpoint | Description |
 | ---- | --------------- |
@@ -30,6 +34,8 @@ A simple kanban for multiple personal projects.
 | [DELETE /users/:id/kanbans/:kanban_id](#delete-kanban) | Delete kanban :kanban_id from user :id |
 
 ### TASKS
+
+Stores and updates information about users' kanban board's tasks.
 
 | Endpoint | Description |
 | ---- | --------------- |
