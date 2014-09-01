@@ -51,7 +51,7 @@ Stores and updates information about users' kanban board's tasks.
 | ---- | --------------- |
 | [POST /users/:id/kanbans/:kanban_id/tasks](#post-tasks) | Create a task in kanban :kanban_id of user :id |
 | [GET /users/:id/kanbans/:kanban_id/tasks](#get-tasks) | Get all tasks from kanban :kanban_id from user :id |
-| [GET /users/:id/tasks](#get-all-tasks) | Get all tasks from user :id ?????????????? |
+| [GET /users/:id/completedtasks](#get-completed-tasks) | Get all completed tasks from user :id |
 | [PUT /users/:id/kanbans/:kanban_id/tasks/:task_id](#put-task) | Update task :task_id from kanban :kanban_id from user :id |
 | [DELETE /users/:id/tasks](#delete-tasks) | Delete all tasks from user :id |
 | [DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id](#delete-task) | Delete task :task_id from kanban :kanban_id from user :id |
@@ -65,6 +65,7 @@ Get app stats; total number of users, kanban boards, tasks and completed tasks f
 Response:
 
   {
+  
       "numberUsers" : "12",
       "numberKanbans" : "67",
       "numberTasks" : "489",
@@ -78,6 +79,7 @@ Get stats for user :id; number of kanban boards, tasks and completed tasks
 Response:
 
   {
+      
       "numberKanbans" : "6",
       "numberTasks" : "86",
       "numberCompletedTasks": "57"
@@ -92,6 +94,7 @@ Completed tasks are the sum of the "done" and "archive" columns of the kanban bo
 Response:
 
   {
+      
       "numberTasks" : "24",
       "numberCompletedTasks": "11"
   }
@@ -105,6 +108,7 @@ Create a new user.
 Request:
 
   {
+      
       "username" : "my_username",
       "password" : "my_password",
       "registered": "01/09/2014",
