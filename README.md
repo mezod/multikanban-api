@@ -12,7 +12,7 @@ A simple kanban for multiple personal projects.
 
 | Endpoint | Description |
 | ---- | --------------- |
-| [POST /users](/#post-users) | Create a user |
+| [POST /users](#post-users) | Create a user |
 | [GET /users](#get-users) | Get all users |
 | [GET /users/:id](#get-user) | Get a user data |
 | [PUT /users/:id](#put-user) | Update user's data |
@@ -20,19 +20,26 @@ A simple kanban for multiple personal projects.
   
 ### KANBANS
   
-  - [POST /users/[id]/kanbans]
-  - [GET /users/[id]/kanbans]
-  - [GET /users/[id]/kanbans/[id]]
-  - [PUT /users/[id]/kanbans/[id]]
-  - [DELETE /users/[id]/kanbans/[id]]
+| Endpoint | Description |
+| ---- | --------------- |
+| [POST /users/:id/kanbans](#post-kanbans) | Create a kanban for user :id |
+| [GET /users/:id/kanbans](#get-kanbans) | Get all kanbans from user :id |
+| [GET /users/:id/kanbans/:kanban_id](#get-kanban) | Get kanban :kanban_id from user :id |
+| [PUT /users/:id/kanbans/:kanban_id](#put-kanban) | Update kanban :kanban_id from user :id |
+| [DELETE /users/:id/kanbans](#delete-kanbans) | Delete all kanbans from user :id |
+| [DELETE /users/:id/kanbans/:kanban_id](#delete-kanban) | Delete kanban :kanban_id from user :id |
 
 ### TASKS
 
-  - [POST /users/[id]/kanbans/[id]/tasks]
-  - [GET /users/[id]/kanbans/[id]/tasks]
-  - [GET /users/[id]/tasks]
-  - [PUT /users/[id]/kanbans/[id]/tasks/[id]]
-  - [DELETE /users/[id]/kanbans/[id]/tasks/[id]]
+| Endpoint | Description |
+| ---- | --------------- |
+| [POST /users/:id/kanbans/:kanban_id/tasks](#post-tasks) | Create a task in kanban :kanban_id of user :id |
+| [GET /users/:id/kanbans/:kanban_id/tasks](#get-tasks) | Get all tasks from kanban :kanban_id from user :id |
+| [GET /users/:id/tasks](#get-all-tasks) | Get all tasks from user :id ?????????????? |
+| [PUT /users/:id/kanbans/:kanban_id/tasks/:task_id](#put-task) | Update task :task_id from kanban :kanban_id from user :id |
+| [DELETE /users/:id/tasks](#delete-tasks) | Delete all tasks from user :id |
+| [DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id](#delete-task) | Delete task :task_id from kanban :kanban_id from user :id |
+
 
 * I need a call to retrieve the total number of:
  - users
