@@ -10,12 +10,13 @@ A simple kanban for multiple personal projects.
 
 ### USERS
 
-  - [POST /users]
-  - [GET /users](#get-users)
-  - [GET /users/[id]]
-  - [PUT /users/[id]]
-  - [DELETE /users/[id]]
-
+| Endpoint | Description |
+| ---- | --------------- |
+| [POST /users](/#post-users) | Create a user |
+| [GET /users](#get-users) | Get all users |
+| [GET /users/:id](#get-user) | Get a user data |
+| [PUT /users/:id](#put-user) | Update user's data |
+| [DELETE /users/:id](#delete-user) | Delete user |
   
 ### KANBANS
   
