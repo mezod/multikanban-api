@@ -8,6 +8,16 @@ A simple kanban for multiple personal projects.
 
 ## API Resources
 
+### STATS
+
+Stores and updates information about stats of the app.
+
+| Endpoint | Description |
+| ---- | --------------- |
+| [GET /stats](#get-stats) | Get app stats; total number of users, kanban boards, tasks and completed tasks for the app  |
+| [GET /users/:id/stats](#get-user-stats) | Get stats for user :id; number of kanban boards, tasks and completed tasks |
+| [GET /kanbans/:kanban_id/stats](#get-kanban-stats) | Get stats for kanban :kanban_id; number of tasks and completed tasks |
+
 ### USERS
 
 Stores and updates information about users of the app.
@@ -46,16 +56,47 @@ Stores and updates information about users' kanban board's tasks.
 | [DELETE /users/:id/tasks](#delete-tasks) | Delete all tasks from user :id |
 | [DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id](#delete-task) | Delete task :task_id from kanban :kanban_id from user :id |
 
+### STATS
 
-* I need a call to retrieve the total number of:
- - users
- - kanbans
- - kanbans per user
- - tasks
- - tasks per user
- - completed tasks (done + archive)
- - completed tasks (done + archive) per user
- 
+#### <a name="get-stats"></a>GET /stats
+
+Get app stats; total number of users, kanban boards, tasks and completed tasks for the app
+
+Response:
+
+  {
+      "numberUsers" : "12",
+      "numberKanbans" : "67",
+      "numberTasks" : "489",
+      "numberCompletedTasks": "274"
+  }
+
+#### <a name="get-user-stats"></a>GET /users/:id/stats
+
+Get stats for user :id; number of kanban boards, tasks and completed tasks
+
+Response:
+
+  {
+      "numberKanbans" : "6",
+      "numberTasks" : "86",
+      "numberCompletedTasks": "57"
+  }
+
+#### <a name="get-kanban-stats"></a>GET /kanbans/:kanban_id/stats
+
+Get stats for kanban :kanban_id; number of tasks and completed tasks
+
+Completed tasks are the sum of the "done" and "archive" columns of the kanban board
+
+Response:
+
+  {
+      "numberTasks" : "24",
+      "numberCompletedTasks": "11"
+  }
+
+### USERS
 
 #### POST /users
 
