@@ -12,12 +12,12 @@
 namespace Symfony\Component\Validator;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ArrayCache;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Context\ExecutionContextFactory;
 use Symfony\Component\Validator\Context\LegacyExecutionContextFactory;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Exception\ValidatorException;
@@ -367,20 +367,6 @@ class ValidatorBuilder implements ValidatorBuilderInterface
 
             if ($this->annotationReader) {
                 $loaders[] = new AnnotationLoader($this->annotationReader);
-
-                AnnotationRegistry::registerLoader(function ($class) {
-                    if (0 === strpos($class, __NAMESPACE__.'\\Constraints\\')) {
-                        $file = str_replace(__NAMESPACE__.'\\Constraints\\', __DIR__.'/Constraints/', $class).'.php';
-
-                        if (is_file($file)) {
-                            require_once $file;
-
-                            return true;
-                        }
-                    }
-
-                    return false;
-                });
             }
 
             $loader = null;
@@ -394,7 +380,7 @@ class ValidatorBuilder implements ValidatorBuilderInterface
             $metadataFactory = new ClassMetadataFactory($loader, $this->metadataCache);
         }
 
-        $validatorFactory = $this->validatorFactory ?: new ConstraintValidatorFactory($this->propertyAccessor);
+        $validatorFactory = $this->validatorFactory;
         $translator = $this->translator ?: new DefaultTranslator();
         $apiVersion = $this->apiVersion;
 
@@ -405,15 +391,21 @@ class ValidatorBuilder implements ValidatorBuilderInterface
         }
 
         if (Validation::API_VERSION_2_4 === $apiVersion) {
+            $validatorFactory = $validatorFactory ?: new ConstraintValidatorFactory($this->propertyAccessor);
+
             return new ValidatorV24($metadataFactory, $validatorFactory, $translator, $this->translationDomain, $this->initializers);
         }
 
-        $contextFactory = new LegacyExecutionContextFactory($metadataFactory, $translator, $this->translationDomain);
-
         if (Validation::API_VERSION_2_5 === $apiVersion) {
-            return new RecursiveValidator($contextFactory, $metadataFactory, $validatorFactory);
+            $contextFactory = new ExecutionContextFactory($translator, $this->translationDomain);
+            $validatorFactory = $validatorFactory ?: new ConstraintValidatorFactory($this->propertyAccessor);
+
+            return new RecursiveValidator($contextFactory, $metadataFactory, $validatorFactory, $this->initializers);
         }
 
-        return new LegacyValidator($contextFactory, $metadataFactory, $validatorFactory);
+        $contextFactory = new LegacyExecutionContextFactory($metadataFactory, $translator, $this->translationDomain);
+        $validatorFactory = $validatorFactory ?: new LegacyConstraintValidatorFactory($this->propertyAccessor);
+
+        return new LegacyValidator($contextFactory, $metadataFactory, $validatorFactory, $this->initializers);
     }
 }

@@ -24,12 +24,12 @@ class Command
     /**
      * @var array
      */
-    private $bits = array();
+    private $bits;
 
     /**
      * @var array
      */
-    private $labels = array();
+    private $labels;
 
     /**
      * @var \Closure|null
@@ -39,11 +39,13 @@ class Command
     /**
      * Constructor.
      *
-     * @param Command|null $parent Parent command
+     * @param Command $parent Parent command
      */
     public function __construct(Command $parent = null)
     {
         $this->parent = $parent;
+        $this->bits   = array();
+        $this->labels = array();
     }
 
     /**
@@ -59,7 +61,7 @@ class Command
     /**
      * Creates a new Command instance.
      *
-     * @param Command|null $parent Parent command
+     * @param Command $parent Parent command
      *
      * @return Command New Command instance
      */
@@ -230,7 +232,7 @@ class Command
     }
 
     /**
-     * @return \Closure|null
+     * @return callable|null
      */
     public function getErrorHandler()
     {

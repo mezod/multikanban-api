@@ -18,6 +18,7 @@
         "symfony/monolog-bridge": "~2.3",
         "symfony/twig-bridge": "~2.3",
         "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
-        "swiftmailer/swiftmailer": "5.*"
+        "swiftmailer/swiftmailer": "5.*",
+        "behat/behat": "2.4.*@stable"
     }
 }

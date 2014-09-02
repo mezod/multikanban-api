@@ -114,6 +114,13 @@ class ExecutionContext implements ExecutionContextInterface
     private $validatedConstraints = array();
 
     /**
+     * Stores which objects have been initialized.
+     *
+     * @var array
+     */
+    private $initializedObjects;
+
+    /**
      * Creates a new execution context.
      *
      * @param ValidatorInterface    $validator         The validator
@@ -139,7 +146,7 @@ class ExecutionContext implements ExecutionContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setNode($value, $object, MetadataInterface $metadata, $propertyPath)
+    public function setNode($value, $object, MetadataInterface $metadata = null, $propertyPath)
     {
         $this->value = $value;
         $this->object = $object;
@@ -176,8 +183,8 @@ class ExecutionContext implements ExecutionContextInterface
             $message,
             $parameters,
             $this->root,
-            $this->getPropertyPath(),
-            $this->getValue(),
+            $this->propertyPath,
+            $this->value,
             null,
             null
         ));
@@ -193,8 +200,8 @@ class ExecutionContext implements ExecutionContextInterface
             $message,
             $parameters,
             $this->root,
-            $this->getPropertyPath(),
-            $this->getValue(),
+            $this->propertyPath,
+            $this->value,
             $this->translator,
             $this->translationDomain
         );
@@ -359,5 +366,21 @@ class ExecutionContext implements ExecutionContextInterface
     public function isConstraintValidated($cacheKey, $constraintHash)
     {
         return isset($this->validatedConstraints[$cacheKey.':'.$constraintHash]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function markObjectAsInitialized($cacheKey)
+    {
+        $this->initializedObjects[$cacheKey] = true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isObjectInitialized($cacheKey)
+    {
+        return isset($this->initializedObjects[$cacheKey]);
     }
 }

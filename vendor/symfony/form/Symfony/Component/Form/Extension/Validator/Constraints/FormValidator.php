@@ -53,6 +53,7 @@ class FormValidator extends ConstraintValidator
 
         /* @var FormInterface $form */
         $config = $form->getConfig();
+        $validator = $this->context->getValidator()->inContext($this->context);
 
         if ($form->isSynchronized()) {
             // Validate the form data only if transformation succeeded
@@ -61,7 +62,7 @@ class FormValidator extends ConstraintValidator
             // Validate the data against its own constraints
             if (self::allowDataWalking($form)) {
                 foreach ($groups as $group) {
-                    $this->context->validate($form->getData(), 'data', $group, true);
+                    $validator->atPath('data')->validate($form->getData(), null, $group);
                 }
             }
 
@@ -71,7 +72,7 @@ class FormValidator extends ConstraintValidator
             foreach ($constraints as $constraint) {
                 foreach ($groups as $group) {
                     if (in_array($group, $constraint->groups)) {
-                        $this->context->validateValue($form->getData(), $constraint, 'data', $group);
+                        $validator->atPath('data')->validate($form->getData(), $constraint, $group);
 
                         // Prevent duplicate validation
                         continue 2;
@@ -100,23 +101,20 @@ class FormValidator extends ConstraintValidator
                     ? (string) $form->getViewData()
                     : gettype($form->getViewData());
 
-                $this->context->addViolation(
-                    $config->getOption('invalid_message'),
-                    array_replace(array('{{ value }}' => $clientDataAsString), $config->getOption('invalid_message_parameters')),
-                    $form->getViewData(),
-                    null,
-                    Form::ERR_INVALID
-                );
+                $this->context->buildViolation($config->getOption('invalid_message'))
+                    ->setParameters(array_replace(array('{{ value }}' => $clientDataAsString), $config->getOption('invalid_message_parameters')))
+                    ->setInvalidValue($form->getViewData())
+                    ->setCode(Form::ERR_INVALID)
+                    ->addViolation();
             }
         }
 
         // Mark the form with an error if it contains extra fields
         if (count($form->getExtraData()) > 0) {
-            $this->context->addViolation(
-                $config->getOption('extra_fields_message'),
-                array('{{ extra_fields }}' => implode('", "', array_keys($form->getExtraData()))),
-                $form->getExtraData()
-            );
+            $this->context->buildViolation($config->getOption('extra_fields_message'))
+                ->setParameter('{{ extra_fields }}', implode('", "', array_keys($form->getExtraData())))
+                ->setInvalidValue($form->getExtraData())
+                ->addViolation();
         }
 
         // Mark the form with an error if the uploaded size was too large
@@ -126,11 +124,10 @@ class FormValidator extends ConstraintValidator
             $max = $this->serverParams->getPostMaxSize();
 
             if (!empty($max) && $length > $max) {
-                $this->context->addViolation(
-                    $config->getOption('post_max_size_message'),
-                    array('{{ max }}' => $this->serverParams->getNormalizedIniPostMaxSize()),
-                    $length
-                );
+                $this->context->buildViolation($config->getOption('post_max_size_message'))
+                    ->setParameter('{{ max }}', $this->serverParams->getNormalizedIniPostMaxSize())
+                    ->setInvalidValue($length)
+                    ->addViolation();
             }
         }
     }
