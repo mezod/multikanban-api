@@ -116,29 +116,22 @@ Get all users.
 Response:
 
     {
-        "metadata": {
-            "count": 123,
-        },
-        "results": [
-            {
-                "id": "1",
-                "nickname": "mezod",
-                "registered": "31/08/2014",
-                "numberKanbans": "7",
-            },
-            {
-                "id": "2",
-                "nickname": "cowboycoder",
-                "registered": "31/08/2014",
-                "numberKanbans": "3",
-            },
-            {
-                "id": "3",
-                "nickname": "gravitysrainbow",
-                "registered": "31/08/2014",
-                "numberKanbans": "4",
-            },
-        ]
+        "id": "1",
+        "nickname": "mezod",
+        "registered": "31/08/2014",
+        "numberKanbans": "7",
+    },
+    {
+        "id": "2",
+        "nickname": "cowboycoder",
+        "registered": "31/08/2014",
+        "numberKanbans": "3",
+    },
+    {
+        "id": "3",
+        "nickname": "gravitysrainbow",
+        "registered": "31/08/2014",
+        "numberKanbans": "4",
     }
 
 #### <a name="get-user"></a>GET /users/:id
