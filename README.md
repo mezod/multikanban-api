@@ -116,29 +116,22 @@ Get all users.
 Response:
 
     {
-        "metadata": {
-            "count": 123,
-        },
-        "results": [
-            {
-                "id": "1",
-                "nickname": "mezod",
-                "registered": "31/08/2014",
-                "numberKanbans": "7",
-            },
-            {
-                "id": "2",
-                "nickname": "cowboycoder",
-                "registered": "31/08/2014",
-                "numberKanbans": "3",
-            },
-            {
-                "id": "3",
-                "nickname": "gravitysrainbow",
-                "registered": "31/08/2014",
-                "numberKanbans": "4",
-            },
-        ]
+        "id": "1",
+        "nickname": "mezod",
+        "registered": "31/08/2014",
+        "numberKanbans": "7",
+    },
+    {
+        "id": "2",
+        "nickname": "cowboycoder",
+        "registered": "31/08/2014",
+        "numberKanbans": "3",
+    },
+    {
+        "id": "3",
+        "nickname": "gravitysrainbow",
+        "registered": "31/08/2014",
+        "numberKanbans": "4",
     }
 
 #### <a name="get-user"></a>GET /users/:id
@@ -361,3 +354,68 @@ Delete task :task_id from kanban :kanban_id from user :id
       "position": "1",
       "column": "backlog"
     }
+
+
+# MongoDB Document Structure Example
+
+    {
+     numberUsers: "1",
+     numberKanbans: "2",
+     numberTasks: "123",
+     numberCompletedTasks: "43",
+     users: [
+              {
+                id: "1",
+                nickname: "mezod",
+                email: "mezod@me.zod",
+                password: "my_password",
+                registered: "31/08/2014",
+                numberKanbans: "2",
+                numberTasks: "123",
+                numberCompletedTasks: "43",
+                kanbans: [
+                            {
+                              id: "1",
+                              title: "Summer trip",
+                              dateCreated: "31/08/2014",
+                              lastEdited: "01/09/2014",
+                              position: "1",
+                              numberTasks: "32",
+                              numberCompletedTasks: "12",
+                              tasks: [
+                                        {
+                                          text: "book flight",
+                                          dateCreated: "31/08/2014",
+                                          dateCompleted: "31/08/2014",
+                                          position: "1",
+                                          column: "done"
+                                        }
+                                    ]
+                            },
+                            {
+                              id: "2",
+                              title: "personal blog",
+                              dateCreated: "31/08/2014",
+                              lastEdited: "31/08/2014",
+                              position: "2",
+                              numberTasks: "56",
+                              numberCompletedTasks: "43",
+                              tasks: [
+                                        {
+                                          text: "write weekly post",
+                                          dateCreated: "31/08/2014",
+                                          dateCompleted: "",
+                                          position: "1",
+                                          column: "to do"
+                                        }
+                                    ]
+                            }
+                        ]
+              },
+            ]
+    }
+
+
+# UML Class Diagram (SQL)
+
+![](http://i.imgur.com/wbtcdSZ.png)
