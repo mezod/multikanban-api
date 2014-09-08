@@ -107,6 +107,7 @@ Request:
     {
       "username" : "mezod",
       "password" : "my_password",
+      "email" : "mezod@me.zod"
     }
   
 #### GET /users
@@ -118,18 +119,24 @@ Response:
     {
         "id": "1",
         "nickname": "mezod",
+        "password": "my_password",
+        "email": "mezod@me.zod",
         "registered": "31/08/2014",
         "numberKanbans": "7",
     },
     {
         "id": "2",
         "nickname": "cowboycoder",
+        "password": "my_password",
+        "email": "cowboy@cod.er",
         "registered": "31/08/2014",
         "numberKanbans": "3",
     },
     {
         "id": "3",
         "nickname": "gravitysrainbow",
+        "password": "my_password",
+        "email": "gravitys@rain.bow",
         "registered": "31/08/2014",
         "numberKanbans": "4",
     }
@@ -143,6 +150,8 @@ Response:
     {
         "id": "1",
         "nickname": "mezod",
+        "password": "my_password",
+        "email": "mezod@me.zod",
         "registered": "31/08/2014",
         "numberKanbans": "7",
     }
@@ -156,6 +165,8 @@ Response:
     {
         "id": "1",
         "nickname": "mezod",
+        "password": "my_password",
+        "email": "mezod@me.zod",
         "registered": "31/08/2014",
         "numberKanbans": "8",
     }
@@ -169,6 +180,8 @@ Response:
     {
         "id": "1",
         "nickname": "mezod",
+        "password": "my_password",
+        "email": "mezod@me.zod",
         "registered": "31/08/2014",
         "numberkanbans": "7",
     }
