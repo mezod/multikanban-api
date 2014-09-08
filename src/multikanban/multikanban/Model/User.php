@@ -10,11 +10,11 @@ class User implements UserInterface
     /* All public properties are persisted */
     public $id;
 
-    public $email;
+    public $username;
 
     public $password;
 
-    public $username;
+    public $email;
 
     public $registered;
 
@@ -27,6 +27,13 @@ class User implements UserInterface
     /* non-persisted properties */
     private $plainPassword;
 
+    public function __construct($username = null, $password = null, $email = null){
+
+        $this->username = $username;
+        $this->password = $password;
+        $this->email = $email;
+    }
+
     /**
      * Start: Security-related stuff
      */
@@ -34,32 +41,21 @@ class User implements UserInterface
     {
         return $this->email;
     }
-    public function eraseCredentials()
-    {
-        $this->password = null;
-    }
+    
     public function getPassword()
     {
         return $this->password;
     }
-    public function getRoles()
+    
+    public function getEmail()
     {
-        return array('ROLE_USER');
+        return $this->email;
     }
-    public function getSalt()
+    
+    public function getRegistered()
     {
-        return null;
+        return $this->registered;
     }
-
-    public function setPlainPassword($plainPassword)
-    {
-        $this->plainPassword = $plainPassword;
-    }
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
 
     public function getNumberKanbans()
     {
@@ -76,4 +72,28 @@ class User implements UserInterface
         return $this->numberCompletedTasks;
     }
 
+
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
+    
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    // ABSTRACT METHODS
+    public function eraseCredentials()
+    {
+        $this->password = null;
+    }
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+    public function getSalt()
+    {
+        return null;
+    }
 }

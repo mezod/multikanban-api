@@ -4,6 +4,8 @@ namespace multikanban\multikanban;
 
 use Silex\Application as SilexApplication;
 use Symfony\Component\Finder\Finder;
+use multikanban\multikanban\Repository\UserRepository;
+use multikanban\multikanban\Repository\RepositoryContainer;
 
 class Application extends SilexApplication
 {
@@ -13,18 +15,12 @@ class Application extends SilexApplication
 
         $this->configureParameters();
         // $this->configureProviders();
-        // $this->configureServices();
+        $this->configureServices();
         // $this->configureSecurity();
         // $this->configureListeners();
     }
 
-    private function configureParameters(){
-
-        $this['root_dir'] = __DIR__.'/../../..';
-        //$this['sqlite_path'] = $this['root_dir'].'/data/code_battles.sqlite';
-    }
-
-	/**
+    /**
 	 * Dynamically finds all *Controller.php files in the Controller directory,
 	 * instantiates them, and mounts their routes.
 	 *
@@ -58,5 +54,53 @@ class Application extends SilexApplication
 
             $this->mount('/', new $class($this));
         }
+    }
+
+    private function configureParameters(){
+
+        $this['root_dir'] = __DIR__.'/../../..';
+        //$this['sqlite_path'] = $this['root_dir'].'/data/code_battles.sqlite';
+    }
+
+    private function configureServices()
+    {
+        $app = $this;
+
+        $this['repository.user'] = $this->share(function() use ($app) {
+            $repo = new UserRepository($app['db'], $app['repository_container']);
+            //$repo->setEncoderFactory($app['security.encoder_factory']);
+
+            return $repo;
+        });
+        // $this['repository.kanban'] = $this->share(function() use ($app) {
+        //     return new KanbanRepository($app['db'], $app['repository_container']);
+        // });
+        // $this['repository.task'] = $this->share(function() use ($app) {
+        //     return new TaskRepository($app['db'], $app['repository_container']);
+        // });
+        // $this['repository.stats'] = $this->share(function() use ($app) {
+        //     return new StatsRepository($app['db'], $app['repository_container']);
+        // });
+        // $this['repository.api_token'] = $this->share(function() use ($app) {
+        //     return new ApiTokenRepository($app['db'], $app['repository_container']);
+        // });
+
+        $this['repository_container'] = $this->share(function() use ($app) {
+            return new RepositoryContainer($app, array(
+                'user' => 'repository.user',
+                // 'programmer' => 'repository.programmer',
+                // 'project' => 'repository.project',
+                // 'battle' => 'repository.battle',
+                // 'api_token' => 'repository.api_token',
+            ));
+        });
+
+        // $this['annotation_reader'] = $this->share(function() {
+        //     return new AnnotationReader();
+        // });
+
+        // $this['api.validator'] = $this->share(function() use ($app) {
+        //     return new ApiValidator($app['validator']);
+        // });
     }
 }

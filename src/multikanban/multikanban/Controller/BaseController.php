@@ -36,8 +36,8 @@ abstract class BaseController implements ControllerProviderInterface
 
     abstract protected function addRoutes(ControllerCollection $controllers);
 
-    public function connect(SilexApplication $app)
-    {
+    public function connect(SilexApplication $app){
+        
         $controllers = $app['controllers_factory'];
 
         $this->addRoutes($controllers);
@@ -45,129 +45,129 @@ abstract class BaseController implements ControllerProviderInterface
         return $controllers;
     }
 
-    /**
-     * Is the current user logged in?
-     *
-     * @return boolean
-     */
-    public function isUserLoggedIn()
-    {
-        return $this->container['security']->isGranted('IS_AUTHENTICATED_FULLY');
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getLoggedInUser()
-    {
-        if (!$this->isUserLoggedIn()) {
-            return;
-        }
-
-        return $this->container['security']->getToken()->getUser();
-    }
-
-    /**
-     * @param  string $routeName  The name of the route
-     * @param  array  $parameters Route variables
-     * @param  bool   $absolute
-     * @return string A URL!
-     */
-    public function generateUrl($routeName, array $parameters = array(), $absolute = false)
-    {
-        return $this->container['url_generator']->generate(
-            $routeName,
-            $parameters,
-            $absolute
-        );
-    }
-
-    /**
-     * @param  string           $url
-     * @param  int              $status
-     * @return RedirectResponse
-     */
-    public function redirect($url, $status = 302)
-    {
-        return new RedirectResponse($url, $status);
-    }
-
-    /**
-     * Logs this user into the system
-     *
-     * @param User $user
-     */
-    public function loginUser(User $user)
-    {
-        $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles());
-
-        $this->container['security']->setToken($token);
-    }
-
-    /**
-     * Used to find the fixtures user - I use it to cheat in the beginning
-     *
-     * @param $username
-     * @return User
-     */
-    public function findUserByUsername($username)
-    {
-        return $this->getUserRepository()->findUserByUsername($username);
-    }
-
-    /**
-     * Shortcut for saving objects
-     *
-     * @param $obj
-     */
-    public function save($obj)
-    {
-        switch (true) {
-            case ($obj instanceof Programmer):
-                $this->getProgrammerRepository()->save($obj);
-                break;
-            default:
-                throw new \Exception(sprintf('Shortcut for saving "%s" not implemented', get_class($obj)));
-        }
-    }
-
-    /**
-     * Shortcut for deleting objects
-     *
-     * @param $obj
-     */
-    public function delete($obj)
-    {
-        switch (true) {
-            case ($obj instanceof Programmer):
-                $this->getProgrammerRepository()->delete($obj);
-                break;
-            default:
-                throw new \Exception(sprintf('Shortcut for saving "%s" not implemented', get_class($obj)));
-        }
-    }
-
-    public function throw404($message = 'Page not found')
-    {
-        throw new NotFoundHttpException($message);
-    }
-
-    /**
-     * @param $obj
-     * @return array
-     */
-    public function validate($obj)
-    {
-        return $this->container['api.validator']->validate($obj);
-    }
+    // /**
+    //  * Is the current user logged in?
+    //  *
+    //  * @return boolean
+    //  */
+    // public function isUserLoggedIn()
+    // {
+    //     return $this->container['security']->isGranted('IS_AUTHENTICATED_FULLY');
+    // }
 
     // /**
-    //  * @return UserRepository
+    //  * @return User|null
     //  */
-    // protected function getUserRepository()
+    // public function getLoggedInUser()
     // {
-    //     return $this->container['repository.user'];
+    //     if (!$this->isUserLoggedIn()) {
+    //         return;
+    //     }
+
+    //     return $this->container['security']->getToken()->getUser();
     // }
+
+    // /**
+    //  * @param  string $routeName  The name of the route
+    //  * @param  array  $parameters Route variables
+    //  * @param  bool   $absolute
+    //  * @return string A URL!
+    //  */
+    // public function generateUrl($routeName, array $parameters = array(), $absolute = false)
+    // {
+    //     return $this->container['url_generator']->generate(
+    //         $routeName,
+    //         $parameters,
+    //         $absolute
+    //     );
+    // }
+
+    // /**
+    //  * @param  string           $url
+    //  * @param  int              $status
+    //  * @return RedirectResponse
+    //  */
+    // public function redirect($url, $status = 302)
+    // {
+    //     return new RedirectResponse($url, $status);
+    // }
+
+    // /**
+    //  * Logs this user into the system
+    //  *
+    //  * @param User $user
+    //  */
+    // public function loginUser(User $user)
+    // {
+    //     $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles());
+
+    //     $this->container['security']->setToken($token);
+    // }
+
+    // /**
+    //  * Used to find the fixtures user - I use it to cheat in the beginning
+    //  *
+    //  * @param $username
+    //  * @return User
+    //  */
+    // public function findUserByUsername($username)
+    // {
+    //     return $this->getUserRepository()->findUserByUsername($username);
+    // }
+
+    // /**
+    //  * Shortcut for saving objects
+    //  *
+    //  * @param $obj
+    //  */
+    // public function save($obj)
+    // {
+    //     switch (true) {
+    //         case ($obj instanceof Programmer):
+    //             $this->getProgrammerRepository()->save($obj);
+    //             break;
+    //         default:
+    //             throw new \Exception(sprintf('Shortcut for saving "%s" not implemented', get_class($obj)));
+    //     }
+    // }
+
+    // /**
+    //  * Shortcut for deleting objects
+    //  *
+    //  * @param $obj
+    //  */
+    // public function delete($obj)
+    // {
+    //     switch (true) {
+    //         case ($obj instanceof Programmer):
+    //             $this->getProgrammerRepository()->delete($obj);
+    //             break;
+    //         default:
+    //             throw new \Exception(sprintf('Shortcut for saving "%s" not implemented', get_class($obj)));
+    //     }
+    // }
+
+    // public function throw404($message = 'Page not found')
+    // {
+    //     throw new NotFoundHttpException($message);
+    // }
+
+    // /**
+    //  * @param $obj
+    //  * @return array
+    //  */
+    // public function validate($obj)
+    // {
+    //     return $this->container['api.validator']->validate($obj);
+    // }
+
+    /**
+     * @return UserRepository
+     */
+    protected function getUserRepository()
+    {
+        return $this->container['repository.user'];
+    }
 
     // /**
     //  * @return ProgrammerRepository

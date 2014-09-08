@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class KanbanController extends BaseController{
 
     protected function addRoutes(ControllerCollection $controllers){
-
+    	
     }
 
    
