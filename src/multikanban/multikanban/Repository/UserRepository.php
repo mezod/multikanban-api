@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use multikanban\multikanban\Model\User;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class UserRepository extends BaseRepository implements UserProviderInterface
@@ -17,6 +18,13 @@ class UserRepository extends BaseRepository implements UserProviderInterface
      * @var EncoderFactoryInterface
      */
     private $encoderFactory;
+
+    protected $connection;
+
+    public function __construct(Connection $connection){        
+
+        $this->connection = $connection;
+    }
 
     protected function getClassName()
     {
@@ -83,7 +91,14 @@ class UserRepository extends BaseRepository implements UserProviderInterface
 
         // query call?
 
-        parent::save($obj);
+        // parent::save($obj);
+        $user = array(
+            'email' => 'mez@d.com',
+            'username' => 'mezod'
+            );
+
+        $this->connection->insert('user', $user);
+        return new Response("User " . $this->connection->lastInsertId() . " created", 201);
     }
 
 

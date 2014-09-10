@@ -36,7 +36,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 	'db.options' => array(
 	'dbname' => 'multikanban',
 	'user' => 'root',
-	'password' => 'root',
+	'password' => '',
 	'host' => 'localhost',
 	'driver' => 'pdo_mysql',
 	),

@@ -67,7 +67,7 @@ class Application extends SilexApplication
         $app = $this;
 
         $this['repository.user'] = $this->share(function() use ($app) {
-            $repo = new UserRepository($app['db'], $app['repository_container']);
+            $repo = new UserRepository($app['db']);
             //$repo->setEncoderFactory($app['security.encoder_factory']);
 
             return $repo;
