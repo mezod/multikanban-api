@@ -119,21 +119,18 @@ Response:
     {
         "id": "1",
         "nickname": "mezod",
-        "password": "my_password",
         "email": "mezod@me.zod",
         "registered": "31/08/2014",
     },
     {
         "id": "2",
         "nickname": "cowboycoder",
-        "password": "my_password",
         "email": "cowboy@cod.er",
         "registered": "31/08/2014",
     },
     {
         "id": "3",
         "nickname": "gravitysrainbow",
-        "password": "my_password",
         "email": "gravitys@rain.bow",
         "registered": "31/08/2014",
     }
@@ -147,10 +144,8 @@ Response:
     {
         "id": "1",
         "nickname": "mezod",
-        "password": "my_password",
         "email": "mezod@me.zod",
         "registered": "31/08/2014",
-        "numberKanbans": "7",
     }
     
 #### <a name="put-user"></a>PUT /users/:id
@@ -162,10 +157,8 @@ Response:
     {
         "id": "1",
         "nickname": "mezod",
-        "password": "my_password",
         "email": "mezod@me.zod",
         "registered": "31/08/2014",
-        "numberKanbans": "8",
     }
     
 #### <a name="delete-user"></a>DELETE /users/:id
@@ -177,10 +170,8 @@ Response:
     {
         "id": "1",
         "nickname": "mezod",
-        "password": "my_password",
         "email": "mezod@me.zod",
         "registered": "31/08/2014",
-        "numberkanbans": "7",
     }
 
 ### KANBANS
@@ -190,6 +181,7 @@ Response:
 Create a kanban for user :id
 
     {
+        "user_id": "1",
         "title": "Summer trip",
         "position": "0"
     }
@@ -199,28 +191,28 @@ Create a kanban for user :id
 Get all kanbans from user :id
 
     {
+        "id": "1",
+        "user_id": "1",
         "title": "Summer trip",
         "dateCreated": "01/09/2014",
         "lastEdited": "01/09/2014",
         "position": "0",
-        "numberTasks": "3",
-        "numberCompletedTasks": "1"
     },
     {
+        "id": "2",
+        "user_id": "1",
         "title": "Personal blog",
         "dateCreated": "31/08/2014",
         "lastEdited": "01/09/2014",
         "position": "1",
-        "numberTasks": "13",
-        "numberCompletedTasks": "4"
     },
     {
+        "id": "3",
+        "user_id": "1",
         "title": "Thesis",
         "dateCreated": "31/09/2014",
         "lastEdited": "01/09/2014",
         "position": "2",
-        "numberTasks": "23",
-        "numberCompletedTasks": "12"
     }
 
 #### <a name="get-kanban"></a>GET /users/:id/kanbans/:kanban_id
@@ -228,12 +220,12 @@ Get all kanbans from user :id
 Get kanban :kanban_id from user :id
 
     {
+        "id": "3",
+        "user_id": "1",
         "title": "Thesis",
         "dateCreated": "31/09/2014",
         "lastEdited": "01/09/2014",
         "position": "2",
-        "numberTasks": "23",
-        "numberCompletedTasks": "12"
     }
 
 #### <a name="put-kanban"></a>PUT /users/:id/kanbans/:kanban_id
@@ -243,7 +235,11 @@ Update kanban :kanban_id from user :id
 Request:
 
     {
+        "id": "3",
+        "user_id": "1",
         "title": "Master's Thesis",
+        "dateCreated": "31/09/2014",
+        "lastEdited": "01/09/2014",
         "position": "2",
     }
 
@@ -256,12 +252,12 @@ Delete all kanbans from user :id
 Delete kanban :kanban_id from user :id
 
     {
-        "title": "Thesis",
+        "id": "3",
+        "user_id": "1",
+        "title": "Master's Thesis",
         "dateCreated": "31/09/2014",
         "lastEdited": "01/09/2014",
         "position": "2",
-        "numberTasks": "23",
-        "numberCompletedTasks": "12"
     }
 
 ### TASKS
@@ -271,6 +267,8 @@ Delete kanban :kanban_id from user :id
 Create a task in kanban :kanban_id of user :id
 
     {
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "Write the abstract",
       "position": "0",
       "column": "backlog"
@@ -281,40 +279,58 @@ Create a task in kanban :kanban_id of user :id
 Get all tasks from kanban :kanban_id from user :id
 
     {
+      "id": "1",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "write the abstract",
       "dateCreated": "31/08/2014",
       "position": "0",
       "column": "backlog"
     },
     {
+      "id": "2",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "meet supervisor",
       "dateCreated": "31/08/2014",
       "position": "1",
       "column": "backlog"
     },
     {
+      "id": "3",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "find a topic",
       "dateCreated": "31/08/2014",
-      "dateEnd": "01/09/2014"
+      "dateCompleted": "01/09/2014"
       "position": "0",
       "column": "done"
     },
     {
+      "id": "4",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "install latex",
       "dateCreated": "31/08/2014",
       "position": "0",
       "column": "to do"
     },
     {
+      "id": "5",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "book lab",
       "dateCreated": "31/08/2014",
       "position": "0",
       "column": "doing"
     },
     {
+      "id": "6",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "book lab",
       "dateCreated": "17/08/2014",
-      "dateEnd": "24/08/2014"
+      "dateCompleted": "24/08/2014"
       "position": "0",
       "column": "archive"
     }
@@ -324,17 +340,23 @@ Get all tasks from kanban :kanban_id from user :id
 
 Get all completed tasks from user :id
 
-    {
+     {
+      "id": "3",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "find a topic",
       "dateCreated": "31/08/2014",
-      "dateEnd": "01/09/2014"
+      "dateCompleted": "01/09/2014"
       "position": "0",
       "column": "done"
     },
     {
+      "id": "6",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "book lab",
       "dateCreated": "17/08/2014",
-      "dateEnd": "24/08/2014"
+      "dateCompleted": "24/08/2014"
       "position": "0",
       "column": "archive"
     }
@@ -344,11 +366,14 @@ Get all completed tasks from user :id
 Update task :task_id from kanban :kanban_id from user :id
 
     {
+      "id": "1",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "write the abstract",
       "dateCreated": "31/08/2014",
       "position": "1",
       "column": "to do"
-    }
+    },
 
 #### <a name="delete-tasks"></a>DELETE /users/:id/tasks
 
@@ -359,11 +384,14 @@ Delete all tasks from user :id
 Delete task :task_id from kanban :kanban_id from user :id
 
     {
+      "id": "2",
+      "user_id": "1",
+      "kanban_id": "3",
       "text": "meet supervisor",
       "dateCreated": "31/08/2014",
       "position": "1",
       "column": "backlog"
-    }
+    },
 
 # UML Class Diagram (SQL)
 
