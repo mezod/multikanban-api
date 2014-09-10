@@ -368,8 +368,14 @@ Delete task :task_id from kanban :kanban_id from user :id
       "column": "backlog"
     }
 
+# UML Class Diagram (SQL)
 
-# MongoDB Document Structure Example
+![](http://imgur.com/dlIVwYB)
+
+
+# DISCARDED
+
+## MongoDB Document Structure Example
 
     {
      numberUsers: "1",
@@ -428,7 +434,3 @@ Delete task :task_id from kanban :kanban_id from user :id
             ]
     }
 
-
-# UML Class Diagram (SQL)
-
-![](http://i.imgur.com/wbtcdSZ.png)
