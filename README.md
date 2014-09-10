@@ -122,7 +122,6 @@ Response:
         "password": "my_password",
         "email": "mezod@me.zod",
         "registered": "31/08/2014",
-        "numberKanbans": "7",
     },
     {
         "id": "2",
@@ -130,7 +129,6 @@ Response:
         "password": "my_password",
         "email": "cowboy@cod.er",
         "registered": "31/08/2014",
-        "numberKanbans": "3",
     },
     {
         "id": "3",
@@ -138,7 +136,6 @@ Response:
         "password": "my_password",
         "email": "gravitys@rain.bow",
         "registered": "31/08/2014",
-        "numberKanbans": "4",
     }
 
 #### <a name="get-user"></a>GET /users/:id
