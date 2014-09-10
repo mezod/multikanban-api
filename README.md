@@ -367,7 +367,7 @@ Delete task :task_id from kanban :kanban_id from user :id
 
 # UML Class Diagram (SQL)
 
-![](http://imgur.com/dlIVwYB)
+![](http://i.imgur.com/dlIVwYB.png)
 
 
 # DISCARDED
