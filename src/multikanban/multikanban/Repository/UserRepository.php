@@ -37,70 +37,56 @@ class UserRepository extends BaseRepository implements UserProviderInterface
     }
 
     /**
-     * @param $username
-     * @return User
-     */
-    public function findUserByUsername($username)
-    {
-        return $this->findOneBy(array(
-            'username' => $username
-        ));
-    }
-
-    /**
-     * @param $email
-     * @return User
-     */
-    public function findUserByEmail($email)
-    {
-        return $this->findOneBy(array(
-            'email' => $email
-        ));
-    }
-
-    /**
-     * A helper for testing things out - finds any user
-     *
-     * @return User
-     * @throws \Exception
-     */
-    public function findAny()
-    {
-        $users = $this->findAllBy(array(), 1);
-
-        if (empty($users)) {
-            throw new \Exception('Could not find any users');
-        }
-
-        return array_shift($users);
-    }
-
-    /**
      * Overridden to encode the password
      *
      * @param $obj
      */
-    public function save($obj)
+    public function save($user)
     {
-        /** @var User $obj */
-        if ($obj->getPlainPassword()) {
-            $obj->password = $this->encodePassword($obj, $obj->getPlainPassword());
+        /** @var User $user */
+        if ($user->getPlainPassword()) {
+            $user->password = $this->encodePassword($user, $user->getPlainPassword());
         }
 
-        var_dump($obj);
+        $data = array();
+        foreach($user as $key => $value){
+            $data[$key] = $value;
+        }
 
-        // query call?
-
-        // parent::save($obj);
-        $user = array(
-            'email' => 'mez@d.com',
-            'username' => 'mezod'
-            );
-
-        $this->connection->insert('user', $user);
-        return new Response("User " . $this->connection->lastInsertId() . " created", 201);
+        $this->connection->insert('user', $data);
     }
 
+    public function findAll(){
+
+        $sql = "SELECT * FROM user";
+        $users = $this->connection->fetchAll($sql);
+        
+        $userArray = array();
+
+        foreach($users as $eachUser){
+            $user = new User();
+            foreach ($eachUser as $key => $value){
+                $user->$key = $value;
+            }
+            array_push($userArray, $user);
+        }
+
+        return $userArray;
+    }
+
+    public function findOneById($id){
+
+        $sql = "SELECT * FROM user WHERE id = ?";
+        $post = $this->connection->fetchAssoc($sql, array((int) $id));
+        
+        $user = new User();
+
+        foreach ($post as $key => $value){
+            $user->$key = $value;
+        }
+
+        return $user;
+    }
 
     public function loadUserByUsername($username)
     {

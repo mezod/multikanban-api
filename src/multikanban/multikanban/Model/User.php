@@ -18,12 +18,6 @@ class User implements UserInterface
 
     public $registered;
 
-    public $numberKanbans;
-
-    public $numberTasks;
-
-    public $numberCompletedTasks;
-
     /* non-persisted properties */
     private $plainPassword;
 
@@ -55,21 +49,6 @@ class User implements UserInterface
     public function getRegistered()
     {
         return $this->registered;
-    }
-
-    public function getNumberKanbans()
-    {
-        return $this->numberKanbans;
-    }
-
-    public function getNumberTasks()
-    {
-        return $this->numberTasks;
-    }
-    
-    public function getNumberCompletedTasks()
-    {
-        return $this->numberCompletedTasks;
     }
 
 
