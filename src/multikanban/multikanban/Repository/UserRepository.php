@@ -88,6 +88,46 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         return $user;
     }
 
+    public function findOneByUsername($username){
+
+        $sql = "SELECT * FROM user WHERE username = ?";
+        $post = $this->connection->fetchAssoc($sql, array($username));
+        
+        $user = new User();
+
+        foreach ($post as $key => $value){
+            $user->$key = $value;
+        }
+
+        return $user;
+    }
+
+    public function update($user){
+
+        if ($user->getPlainPassword()) {
+            $user->password = $this->encodePassword($user, $user->getPlainPassword());
+        }
+
+        $data = array();
+        foreach($user as $key => $value){
+            $data[$key] = $value;
+        }
+
+        $this->connection->update('user', $data, array('id' => $data['id']));
+    }
+
+    public function delete($user){
+
+        $this->connection->delete('user', array('id' => $user->id));
+    }
+
+
+
+
+
+
+
+
     public function loadUserByUsername($username)
     {
         $user = $this->findUserByUsername($username);

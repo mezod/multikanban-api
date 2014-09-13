@@ -18,6 +18,8 @@ class UserController extends BaseController{
     	$controllers->post('/users', array($this, 'createAction'));
         $controllers->get('/users', array($this, 'getAllAction'));
         $controllers->get('/users/{id}', array($this, 'getAction'));
+        $controllers->put('/users/{id}', array($this, 'updateAction'));
+        $controllers->delete('/users/{id}', array($this, 'deleteAction'));
     }
 
     public function createAction(Request $request){
@@ -34,7 +36,16 @@ class UserController extends BaseController{
 
     	$this->getUserRepository()->save($user);
 
-        return new Response("User successfully created, really", 201);
+        $newUser = $this->getUserRepository()->findOneByUsername($user->username);
+
+        $userArray = array(
+            'id' => $newUser->id,
+            'username' => $newUser->username,
+            'email' => $newUser->email,
+            'registered' => $newUser->registered
+        );
+
+        return new JsonResponse($userArray, 201);
     }
 
     public function getAllAction(){
@@ -70,4 +81,38 @@ class UserController extends BaseController{
         return new JsonResponse($data, 200);
     }
 
+    public function updateAction(Request $request, $id){
+
+        $user = $this->getUserRepository()->findOneById($id);
+
+        $data = json_decode($request->getContent(), true);
+
+        $user->username = $data['username'];
+        $user->password = $data['password'];
+        $user->email = $data['email'];
+
+        //var_dump($user);
+
+        $this->getUserRepository()->update($user);
+
+        // $newUser = $this->getUserRepository()->findOneByUsername($user->username);
+
+        $userArray = array(
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'registered' => $user->registered
+        );
+
+        return new JsonResponse($userArray, 200);
+    }
+
+    public function deleteAction(Request $request, $id){
+
+        $user = $this->getUserRepository()->findOneById($id);
+
+        $this->getUserRepository()->delete($user);
+
+        return new Response(null, 204);
+    }
 }
