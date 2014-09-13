@@ -167,12 +167,7 @@ Delete user :id.
 
 Response:
 
-    {
-        "id": "1",
-        "nickname": "mezod",
-        "email": "mezod@me.zod",
-        "registered": "31/08/2014",
-    }
+No Content
 
 ### KANBANS
 
