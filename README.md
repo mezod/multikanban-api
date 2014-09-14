@@ -40,7 +40,6 @@ Stores and updates information about users' kanban boards.
 | [GET /users/:id/kanbans](#get-kanbans) | Get all kanbans from user :id |
 | [GET /users/:id/kanbans/:kanban_id](#get-kanban) | Get kanban :kanban_id from user :id |
 | [PUT /users/:id/kanbans/:kanban_id](#put-kanban) | Update kanban :kanban_id from user :id |
-| [DELETE /users/:id/kanbans](#delete-kanbans) | Delete all kanbans from user :id |
 | [DELETE /users/:id/kanbans/:kanban_id](#delete-kanban) | Delete kanban :kanban_id from user :id |
 
 ### TASKS
@@ -53,7 +52,6 @@ Stores and updates information about users' kanban board's tasks.
 | [GET /users/:id/kanbans/:kanban_id/tasks](#get-tasks) | Get all tasks from kanban :kanban_id from user :id |
 | [GET /users/:id/completedtasks](#get-completed-tasks) | Get all completed tasks from user :id |
 | [PUT /users/:id/kanbans/:kanban_id/tasks/:task_id](#put-task) | Update task :task_id from kanban :kanban_id from user :id |
-| [DELETE /users/:id/tasks](#delete-tasks) | Delete all tasks from user :id |
 | [DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id](#delete-task) | Delete task :task_id from kanban :kanban_id from user :id |
 
 ### STATS
@@ -238,22 +236,9 @@ Request:
         "position": "2",
     }
 
-#### <a name="delete-kanbans"></a>DELETE /users/:id/kanbans
-
-Delete all kanbans from user :id
-
 #### <a name="delete-kanban"></a>DELETE /users/:id/kanbans/:kanban_id
 
 Delete kanban :kanban_id from user :id
-
-    {
-        "id": "3",
-        "user_id": "1",
-        "title": "Master's Thesis",
-        "dateCreated": "31/09/2014",
-        "lastEdited": "01/09/2014",
-        "position": "2",
-    }
 
 ### TASKS
 
@@ -370,23 +355,9 @@ Update task :task_id from kanban :kanban_id from user :id
       "column": "to do"
     },
 
-#### <a name="delete-tasks"></a>DELETE /users/:id/tasks
-
-Delete all tasks from user :id
-
 #### <a name="delete-task"></a>DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id
 
 Delete task :task_id from kanban :kanban_id from user :id
-
-    {
-      "id": "2",
-      "user_id": "1",
-      "kanban_id": "3",
-      "text": "meet supervisor",
-      "dateCreated": "31/08/2014",
-      "position": "1",
-      "column": "backlog"
-    },
 
 # UML Class Diagram (SQL)
 
