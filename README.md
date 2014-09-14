@@ -228,12 +228,8 @@ Update kanban :kanban_id from user :id
 Request:
 
     {
-        "id": "3",
-        "user_id": "1",
         "title": "Master's Thesis",
-        "dateCreated": "31/09/2014",
-        "lastEdited": "01/09/2014",
-        "position": "2",
+        "position": "2"
     }
 
 #### <a name="delete-kanban"></a>DELETE /users/:id/kanbans/:kanban_id
