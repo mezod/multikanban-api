@@ -81,6 +81,8 @@ class KanbanRepository{
 
     public function update($kanban){
 
+        //ITERATE: position change? Update changes for the rest
+
         $data = array();
         foreach($kanban as $key => $value){
             $data[$key] = $value;
@@ -90,6 +92,8 @@ class KanbanRepository{
     }
 
     public function delete($kanban){
+
+        //ITERATE: deletion means position change? Update changes for the rest
 
         $this->connection->delete('kanban', array('id' => $kanban->id));
     }
