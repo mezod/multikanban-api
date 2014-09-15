@@ -10,7 +10,7 @@ class Kanban
     /**
      * @var User
      */
-    public $user;
+    public $user_id;
 
     public $title;
 
@@ -19,8 +19,4 @@ class Kanban
     public $lastEdited;
 
     public $position;
-
-    public $numberTasks;
-
-    public $numberCompletedTasks;
 }

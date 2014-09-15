@@ -2,8 +2,6 @@
 
 namespace multikanban\multikanban\Repository;
 
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use multikanban\multikanban\Model\User;
@@ -79,12 +77,14 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         $sql = "SELECT * FROM user WHERE id = ?";
         $post = $this->connection->fetchAssoc($sql, array((int) $id));
         
+        if(!$post) return false;
+        
         $user = new User();
-
+        
         foreach ($post as $key => $value){
             $user->$key = $value;
         }
-
+        
         return $user;
     }
 

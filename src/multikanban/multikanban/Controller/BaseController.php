@@ -45,121 +45,7 @@ abstract class BaseController implements ControllerProviderInterface
         return $controllers;
     }
 
-    // /**
-    //  * Is the current user logged in?
-    //  *
-    //  * @return boolean
-    //  */
-    // public function isUserLoggedIn()
-    // {
-    //     return $this->container['security']->isGranted('IS_AUTHENTICATED_FULLY');
-    // }
-
-    // /**
-    //  * @return User|null
-    //  */
-    // public function getLoggedInUser()
-    // {
-    //     if (!$this->isUserLoggedIn()) {
-    //         return;
-    //     }
-
-    //     return $this->container['security']->getToken()->getUser();
-    // }
-
-    // /**
-    //  * @param  string $routeName  The name of the route
-    //  * @param  array  $parameters Route variables
-    //  * @param  bool   $absolute
-    //  * @return string A URL!
-    //  */
-    // public function generateUrl($routeName, array $parameters = array(), $absolute = false)
-    // {
-    //     return $this->container['url_generator']->generate(
-    //         $routeName,
-    //         $parameters,
-    //         $absolute
-    //     );
-    // }
-
-    // /**
-    //  * @param  string           $url
-    //  * @param  int              $status
-    //  * @return RedirectResponse
-    //  */
-    // public function redirect($url, $status = 302)
-    // {
-    //     return new RedirectResponse($url, $status);
-    // }
-
-    // /**
-    //  * Logs this user into the system
-    //  *
-    //  * @param User $user
-    //  */
-    // public function loginUser(User $user)
-    // {
-    //     $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles());
-
-    //     $this->container['security']->setToken($token);
-    // }
-
-    // /**
-    //  * Used to find the fixtures user - I use it to cheat in the beginning
-    //  *
-    //  * @param $username
-    //  * @return User
-    //  */
-    // public function findUserByUsername($username)
-    // {
-    //     return $this->getUserRepository()->findUserByUsername($username);
-    // }
-
-    // /**
-    //  * Shortcut for saving objects
-    //  *
-    //  * @param $obj
-    //  */
-    // public function save($obj)
-    // {
-    //     switch (true) {
-    //         case ($obj instanceof Programmer):
-    //             $this->getProgrammerRepository()->save($obj);
-    //             break;
-    //         default:
-    //             throw new \Exception(sprintf('Shortcut for saving "%s" not implemented', get_class($obj)));
-    //     }
-    // }
-
-    // /**
-    //  * Shortcut for deleting objects
-    //  *
-    //  * @param $obj
-    //  */
-    // public function delete($obj)
-    // {
-    //     switch (true) {
-    //         case ($obj instanceof Programmer):
-    //             $this->getProgrammerRepository()->delete($obj);
-    //             break;
-    //         default:
-    //             throw new \Exception(sprintf('Shortcut for saving "%s" not implemented', get_class($obj)));
-    //     }
-    // }
-
-    // public function throw404($message = 'Page not found')
-    // {
-    //     throw new NotFoundHttpException($message);
-    // }
-
-    // /**
-    //  * @param $obj
-    //  * @return array
-    //  */
-    // public function validate($obj)
-    // {
-    //     return $this->container['api.validator']->validate($obj);
-    // }
+ 
 
     /**
      * @return UserRepository
@@ -169,45 +55,21 @@ abstract class BaseController implements ControllerProviderInterface
         return $this->container['repository.user'];
     }
 
-    // /**
-    //  * @return ProgrammerRepository
-    //  */
-    // protected function getProgrammerRepository()
-    // {
-    //     return $this->container['repository.programmer'];
-    // }
+    /**
+     * @return KanbanRepository
+     */
+    protected function getKanbanRepository()
+    {
+        return $this->container['repository.kanban'];
+    }
 
-    // /**
-    //  * @return ProjectRepository
-    //  */
-    // protected function getProjectRepository()
-    // {
-    //     return $this->container['repository.project'];
-    // }
+    /**
+     * @return TaskRepository
+     */
+    protected function getTaskRepository()
+    {
+        return $this->container['repository.task'];
+    }
 
-    // /**
-    //  * @return  
-    //  * multikanban\multikanban\Repository\BattleRepository
-    //  */ 
-    // protected function getBattleRepository()
-    // {
-    //     return $this->container['repository.battle'];
-    // }
-
-    // /**
-    //  * @return \multikanban\multikanban\Battle\BattleManager
-    //  */
-    // protected function getBattleManager()
-    // {
-    //     return $this->container['battle.battle_manager'];
-    // }
-
-    // /**
-    //  * @return ApiTokenRepository
-    //  */
-    // protected function getApiTokenRepository()
-    // {
-    //     return $this->container['repository.api_token'];
-    // }
 
 }

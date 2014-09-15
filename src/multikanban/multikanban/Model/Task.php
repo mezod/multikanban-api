@@ -10,12 +10,12 @@ class Task
     /**
      * @var User
      */
-    public $user;
+    public $user_id;
 
     /**
      * @var Kanban
      */
-    public $kanban;
+    public $kanban_id;
 
     public $text;
 
@@ -25,5 +25,5 @@ class Task
 
     public $position;
 
-    public $column;
+    public $state;
 }

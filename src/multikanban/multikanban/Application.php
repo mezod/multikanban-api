@@ -5,7 +5,10 @@ namespace multikanban\multikanban;
 use Silex\Application as SilexApplication;
 use Symfony\Component\Finder\Finder;
 use multikanban\multikanban\Repository\UserRepository;
-use multikanban\multikanban\Repository\RepositoryContainer;
+use multikanban\multikanban\Repository\KanbanRepository;
+use multikanban\multikanban\Repository\TaskRepository;
+
+
 
 class Application extends SilexApplication
 {
@@ -72,12 +75,12 @@ class Application extends SilexApplication
 
             return $repo;
         });
-        // $this['repository.kanban'] = $this->share(function() use ($app) {
-        //     return new KanbanRepository($app['db'], $app['repository_container']);
-        // });
-        // $this['repository.task'] = $this->share(function() use ($app) {
-        //     return new TaskRepository($app['db'], $app['repository_container']);
-        // });
+        $this['repository.kanban'] = $this->share(function() use ($app) {
+            return new KanbanRepository($app['db']);
+        });
+        $this['repository.task'] = $this->share(function() use ($app) {
+            return new TaskRepository($app['db']);
+        });
         // $this['repository.stats'] = $this->share(function() use ($app) {
         //     return new StatsRepository($app['db'], $app['repository_container']);
         // });
@@ -85,22 +88,5 @@ class Application extends SilexApplication
         //     return new ApiTokenRepository($app['db'], $app['repository_container']);
         // });
 
-        $this['repository_container'] = $this->share(function() use ($app) {
-            return new RepositoryContainer($app, array(
-                'user' => 'repository.user',
-                // 'programmer' => 'repository.programmer',
-                // 'project' => 'repository.project',
-                // 'battle' => 'repository.battle',
-                // 'api_token' => 'repository.api_token',
-            ));
-        });
-
-        // $this['annotation_reader'] = $this->share(function() {
-        //     return new AnnotationReader();
-        // });
-
-        // $this['api.validator'] = $this->share(function() use ($app) {
-        //     return new ApiValidator($app['validator']);
-        // });
     }
 }

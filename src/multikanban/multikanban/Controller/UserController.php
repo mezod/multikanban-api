@@ -59,7 +59,7 @@ class UserController extends BaseController{
             foreach ($eachUser as $key => $value) {
                $eachArray[$key] = $value;
             }
-            array_push($data,$eachArray);
+            array_push($data, $eachArray);
         }
 
         return new JsonResponse($data, 200);
@@ -70,6 +70,7 @@ class UserController extends BaseController{
         $user = $this->getUserRepository()->findOneById($id);
 
         //var_dump($user);
+        if(!$user) return new JsonResponse(array(), 200);
 
         $data = array(
             'id' => $user->id,
@@ -84,6 +85,8 @@ class UserController extends BaseController{
     public function updateAction(Request $request, $id){
 
         $user = $this->getUserRepository()->findOneById($id);
+
+        if(!$user) return new JsonResponse(array(), 200);
 
         $data = json_decode($request->getContent(), true);
 
@@ -110,6 +113,8 @@ class UserController extends BaseController{
     public function deleteAction(Request $request, $id){
 
         $user = $this->getUserRepository()->findOneById($id);
+
+        if(!$user) return new Response(null, 204);
 
         $this->getUserRepository()->delete($user);
 
