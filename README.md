@@ -342,11 +342,7 @@ Get all completed tasks from user :id
 Update task :task_id from kanban :kanban_id from user :id
 
     {
-      "id": "1",
-      "user_id": "1",
-      "kanban_id": "3",
       "text": "write the abstract",
-      "dateCreated": "31/08/2014",
       "position": "1",
       "column": "to do"
     },
