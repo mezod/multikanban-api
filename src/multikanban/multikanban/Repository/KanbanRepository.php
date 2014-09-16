@@ -81,8 +81,6 @@ class KanbanRepository{
 
     public function update($kanban){
 
-        //ITERATE: position change? Update changes for the rest
-
         $data = array();
         foreach($kanban as $key => $value){
             $data[$key] = $value;
@@ -91,10 +89,25 @@ class KanbanRepository{
         $this->connection->update('kanban', $data, array('id' => $data['id']));
     }
 
+    public function updatePositions($user_id, $oldPosition, $newPosition){
+
+        if($oldPosition < $newPosition){
+            $sql = "UPDATE kanban SET position = position - 1 WHERE user_id = ? AND position > ? AND position <= ?";
+            $this->connection->executeQuery($sql, array((int) $user_id, (int) $oldPosition, (int) $newPosition));
+        }else{
+            $sql = "UPDATE kanban SET position = position + 1 WHERE user_id = ? AND position < ? AND position >= ?";
+            $this->connection->executeQuery($sql, array((int) $user_id, (int) $oldPosition, (int) $newPosition));
+        }
+    }
+
     public function delete($kanban){
 
-        //ITERATE: deletion means position change? Update changes for the rest
-
         $this->connection->delete('kanban', array('id' => $kanban->id));
+    }
+
+    public function updatePositionsDelete($user_id, $position){
+
+        $sql = "UPDATE kanban SET position = position - 1 WHERE user_id = ? AND position > ?";
+        $this->connection->executeQuery($sql, array((int) $user_id, (int) $position));
     }
 }

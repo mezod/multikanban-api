@@ -37,6 +37,8 @@ class TaskController extends BaseController{
     	$task->position = 0;
     	$task->state = 'backlog';
 
+        $this->getTaskRepository()->increaseBacklogPosition($kanban_id);
+
         //var_dump($user);
 
     	$task_id = $this->getTaskRepository()->save($task);
@@ -100,6 +102,9 @@ class TaskController extends BaseController{
         $data = json_decode($request->getContent(), true);
 
         $task->text = $data['text'];
+        if($task->position != $data['position'] ||  $task->state != $data['state']){
+            $this->getTaskRepository()->updatePositions($kanban_id, $task->position, $data['position'], $task->state, $data['state']);
+        }
         $task->position = $data['position'];
         $task->state = $data['state'];
         if(!$task->dateCompleted && ($data['state'] == 'done' || $data['state'] == 'archive')){
@@ -127,6 +132,8 @@ class TaskController extends BaseController{
         $task = $this->getTaskRepository()->findOneById($id);
 
         if(!$task) return new Response(null, 204);
+
+        $this->getTaskRepository()->updatePositionsDelete($kanban_id, $task->position);
 
         $this->getTaskRepository()->delete($task);
 

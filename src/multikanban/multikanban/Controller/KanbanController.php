@@ -97,6 +97,9 @@ class KanbanController extends BaseController{
         $data = json_decode($request->getContent(), true);
 
         $kanban->title = $data['title'];
+        if($kanban->position != $data['position']){
+            $this->getKanbanRepository()->updatePositions($user_id, $kanban->position, $data['position']);
+        }
         $kanban->position = $data['position'];
 
         $this->getKanbanRepository()->update($kanban);
@@ -118,6 +121,8 @@ class KanbanController extends BaseController{
         $kanban = $this->getKanbanRepository()->findOneById($id);
 
         if(!$kanban) return new Response(null, 204);
+
+        $this->getKanbanRepository()->updatePositionsDelete($user_id, $kanban->position);
 
         $this->getKanbanRepository()->delete($kanban);
 

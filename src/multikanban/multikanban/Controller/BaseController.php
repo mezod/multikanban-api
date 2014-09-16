@@ -71,5 +71,13 @@ abstract class BaseController implements ControllerProviderInterface
         return $this->container['repository.task'];
     }
 
+    /**
+     * @return StatsRepository
+     */
+    protected function getStatsRepository()
+    {
+        return $this->container['repository.stats'];
+    }
+
 
 }

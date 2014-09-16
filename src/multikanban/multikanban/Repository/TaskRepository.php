@@ -38,6 +38,12 @@ class TaskRepository{
         return $this->connection->lastInsertId();
     }
 
+    public function increaseBacklogPosition($kanban_id){
+
+        $sql = "UPDATE task SET position = position + 1 WHERE kanban_id = ?";
+        $this->connection->executeQuery($sql, array((int) $kanban_id));
+    }
+
     public function findAll($kanban_id){
 
         $sql = "SELECT * FROM task WHERE kanban_id = ?";
@@ -104,10 +110,37 @@ class TaskRepository{
         $this->connection->update('task', $data, array('id' => $data['id']));
     }
 
+    public function updatePositions($kanban_id, $oldPosition, $newPosition, $oldState, $newState){
+
+        if($oldState != $newState){
+            // Update oldState positions
+            $sql = "UPDATE task SET position = position - 1 WHERE kanban_id = ? AND position > ? AND state = ?";
+            $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $oldPosition, $oldState));
+
+            // Update newState positions
+            $sql = "UPDATE task SET position = position + 1 WHERE kanban_id = ? AND position >= ? AND state = ?";
+            $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $newPosition, $newState));
+        }else{
+            if($oldPosition < $newPosition){
+                $sql = "UPDATE task SET position = position - 1 WHERE kanban_id = ? AND position > ? AND position <= ?";
+                $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $oldPosition, (int) $newPosition));
+            }else{
+                $sql = "UPDATE task SET position = position + 1 WHERE kanban_id = ? AND position < ? AND position >= ?";
+                $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $oldPosition, (int) $newPosition));
+            }  
+        }
+    }
+
     public function delete($task){
 
     	//ITERATE: deletion means position change? Update changes for the rest
 
         $this->connection->delete('task', array('id' => $task->id));
+    }
+
+    public function updatePositionsDelete($kanban_id, $position){
+
+        $sql = "UPDATE task SET position = position - 1 WHERE kanban_id = ? AND position > ?";
+        $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $position));
     }
 }

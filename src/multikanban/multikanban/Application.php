@@ -7,6 +7,7 @@ use Symfony\Component\Finder\Finder;
 use multikanban\multikanban\Repository\UserRepository;
 use multikanban\multikanban\Repository\KanbanRepository;
 use multikanban\multikanban\Repository\TaskRepository;
+use multikanban\multikanban\Repository\StatsRepository;
 
 
 
@@ -81,9 +82,9 @@ class Application extends SilexApplication
         $this['repository.task'] = $this->share(function() use ($app) {
             return new TaskRepository($app['db']);
         });
-        // $this['repository.stats'] = $this->share(function() use ($app) {
-        //     return new StatsRepository($app['db'], $app['repository_container']);
-        // });
+        $this['repository.stats'] = $this->share(function() use ($app) {
+            return new StatsRepository($app['db']);
+        });
         // $this['repository.api_token'] = $this->share(function() use ($app) {
         //     return new ApiTokenRepository($app['db'], $app['repository_container']);
         // });
