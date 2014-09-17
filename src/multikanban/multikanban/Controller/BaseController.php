@@ -79,5 +79,4 @@ abstract class BaseController implements ControllerProviderInterface
         return $this->container['repository.stats'];
     }
 
-
 }

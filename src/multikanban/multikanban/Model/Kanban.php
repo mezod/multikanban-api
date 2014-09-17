@@ -14,6 +14,8 @@ class Kanban
 
     public $title;
 
+    public $slug;
+
     public $dateCreated;
 
     public $lastEdited;

@@ -88,6 +88,5 @@ class Application extends SilexApplication
         // $this['repository.api_token'] = $this->share(function() use ($app) {
         //     return new ApiTokenRepository($app['db'], $app['repository_container']);
         // });
-
     }
 }

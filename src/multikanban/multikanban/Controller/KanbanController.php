@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use multikanban\multikanban\Model\Kanban;
 use multikanban\multikanban\Repository\KanbanRepository;
 
+use multikanban\multikanban\Util\Util;
+
 
 class KanbanController extends BaseController{
 
@@ -31,6 +33,7 @@ class KanbanController extends BaseController{
     	$kanban = new Kanban();
     	$kanban->user_id = $user_id;
     	$kanban->title = $data['title'];
+        $kanban->slug = Util::slugify($data['title']);
     	$kanban->dateCreated = date("Y-m-d");
     	$kanban->lastEdited = $kanban->dateCreated;
     	$kanban->position = $this->getKanbanRepository()->getKanbanPosition($user_id);
@@ -45,6 +48,7 @@ class KanbanController extends BaseController{
             'id' => $kanban_id,
             'user_id' => $kanban->user_id,
             'title' => $kanban->title,
+            'slug' => $kanban->slug,
             'dateCreated' => $kanban->dateCreated,
             'lastEdited' => $kanban->lastEdited,
             'position' => $kanban->position
@@ -80,6 +84,7 @@ class KanbanController extends BaseController{
             'id' => $kanban->id,
             'user_id' => $kanban->user_id,
             'title' => $kanban->title,
+            'slug' => $kanban->slug,
             'dateCreated' => $kanban->dateCreated,
             'lastEdited' => $kanban->lastEdited,
             'position' => $kanban->position
@@ -96,7 +101,11 @@ class KanbanController extends BaseController{
 
         $data = json_decode($request->getContent(), true);
 
-        $kanban->title = $data['title'];
+        if($kanban->title != $data['title']){
+            $kanban->title = $data['title'];
+            $kanban->slug = Util::slugify($data['title']);
+        }
+
         if($kanban->position != $data['position']){
             $this->getKanbanRepository()->updatePositions($user_id, $kanban->position, $data['position']);
         }
@@ -108,6 +117,7 @@ class KanbanController extends BaseController{
             'id' => $kanban->id,
             'user_id' => $kanban->user_id,
             'title' => $kanban->title,
+            'slug' => $kanban->slug,
             'dateCreated' => $kanban->dateCreated,
             'lastEdited' => $kanban->lastEdited,
             'position' => $kanban->position
