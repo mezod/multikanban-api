@@ -79,4 +79,13 @@ abstract class BaseController implements ControllerProviderInterface
         return $this->container['repository.stats'];
     }
 
+
+    /**
+     * @param $obj
+     * @return array
+     */
+    public function validate($obj)
+    {
+        return $this->container['api.validator']->validate($obj);
+    }
 }

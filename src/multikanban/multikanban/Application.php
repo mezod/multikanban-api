@@ -4,10 +4,21 @@ namespace multikanban\multikanban;
 
 use Silex\Application as SilexApplication;
 use Symfony\Component\Finder\Finder;
+
+//Providers
+use Silex\Provider\DoctrineServiceProvider;
+
+//Services
 use multikanban\multikanban\Repository\UserRepository;
 use multikanban\multikanban\Repository\KanbanRepository;
 use multikanban\multikanban\Repository\TaskRepository;
 use multikanban\multikanban\Repository\StatsRepository;
+use Doctrine\Common\Annotations\AnnotationReader;
+use multikanban\multikanban\Validator\ApiValidator;
+use Silex\Provider\ValidatorServiceProvider;
+use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+
 
 
 
@@ -18,7 +29,7 @@ class Application extends SilexApplication
         parent::__construct($values);
 
         $this->configureParameters();
-        // $this->configureProviders();
+        $this->configureProviders();
         $this->configureServices();
         // $this->configureSecurity();
         // $this->configureListeners();
@@ -66,6 +77,29 @@ class Application extends SilexApplication
         //$this['sqlite_path'] = $this['root_dir'].'/data/code_battles.sqlite';
     }
 
+    private function configureProviders()
+    {
+        // Doctrine DBAL
+        $this->register(new DoctrineServiceProvider(), array(
+            'db.options' => array(
+            'dbname' => 'multikanban',
+            'user' => 'root',
+            'password' => '',
+            'host' => 'localhost',
+            'driver' => 'pdo_mysql',
+            ),
+        ));
+
+        // Validation
+        $this->register(new ValidatorServiceProvider());
+        // configure validation to load from a YAML file
+        $this['validator.mapping.class_metadata_factory'] = $this->share(function() {
+            return new ClassMetadataFactory(
+                new AnnotationLoader($this['annotation_reader'])
+            );
+        });
+    }
+
     private function configureServices()
     {
         $app = $this;
@@ -88,5 +122,13 @@ class Application extends SilexApplication
         // $this['repository.api_token'] = $this->share(function() use ($app) {
         //     return new ApiTokenRepository($app['db'], $app['repository_container']);
         // });
+
+        $this['annotation_reader'] = $this->share(function() {
+            return new AnnotationReader();
+        });
+
+        $this['api.validator'] = $this->share(function() use ($app) {
+            return new ApiValidator($app['validator']);
+        });
     }
 }

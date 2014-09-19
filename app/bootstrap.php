@@ -22,27 +22,6 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 /*
- ************* OTHER SETUP ******************
- */
-
-// if (!file_exists($app['sqlite_path'])) {
-//     * @var \KnpU\CodeBattle\DataFixtures\FixturesManager $fixtures 
-//     $fixtures = $app['fixtures_manager'];
-//     $fixtures->resetDatabase();
-//     $fixtures->populateData($app);
-// }
-
-$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-	'db.options' => array(
-	'dbname' => 'multikanban',
-	'user' => 'root',
-	'password' => '',
-	'host' => 'localhost',
-	'driver' => 'pdo_mysql',
-	),
-));
-
-/*
  ************* CONTROLLERS ******************
  */
 
