@@ -355,6 +355,23 @@ Delete task :task_id from kanban :kanban_id from user :id
 
 ![](http://i.imgur.com/dlIVwYB.png)
 
+# Milestones
+
+- POST, GET, PUT, DELETE, PATCH
+- Controllers
+- Services
+- Interfaces
+- Providers
+- Listeners
+- Behat
+- Exception handling
+- DBAL Annotations
+
+## ERROR HANDLING
+
+- Validation errors
+- Invalid JSON errors
+- 404 errors
 
 # DISCARDED
 
