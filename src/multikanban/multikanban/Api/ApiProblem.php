@@ -2,6 +2,8 @@
 
 namespace multikanban\multikanban\Api;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class ApiProblem{
 
 	const TYPE_VALIDATION_ERROR = 'validation_error';
@@ -18,21 +20,29 @@ class ApiProblem{
 
 	private $extraData = array();
 
-	public function __construct($statusCode, $type){
+	public function __construct($statusCode, $type = null){
 
 		$this->statusCode = $statusCode;
 		$this->type = $type;
 
-		if(!isset(self::$titles[$type])){
-			throw new \Exception(
-				sprintf(
-					'No title for type "%s". Did you make it up?',
-					$type
-				)
-			);
-		}
+		if($type === null){
+			$this->type = 'about:blank';
+			$this->title = isset(Response::$statusTexts[$statusCode])
+				? Response::$statusTexts[$statusCode]
+				: 'Unknown status code :(';
+		} else {
 
-		$this->title = self::$titles[$type];
+			if(!isset(self::$titles[$type])){
+				throw new \Exception(
+					sprintf(
+						'No title for type "%s". Did you make it up?',
+						$type
+					)
+				);
+			}
+
+			$this->title = self::$titles[$type];
+		}		
 	}
 
 	public function toArray(){
@@ -55,5 +65,10 @@ class ApiProblem{
 	public function getStatusCode(){
 
 		return $this->statusCode;
+	}
+
+	public function getTitle(){
+
+		return $this->title;
 	}
 }

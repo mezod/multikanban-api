@@ -41,6 +41,12 @@ class TaskController extends BaseController{
 
         //var_dump($user);
 
+        // Validate $task
+        $errors = $this->validate($task);
+        if(!empty($errors)){
+            return $this->throwApiProblemValidationException($errors);
+        }
+
     	$task_id = $this->getTaskRepository()->save($task);
 
         //$newTask = $this->getTaskRepository()->findOneByUsername($user->username);
@@ -109,6 +115,12 @@ class TaskController extends BaseController{
         $task->state = $data['state'];
         if(!$task->dateCompleted && ($data['state'] == 'done' || $data['state'] == 'archive')){
         	$task->dateCompleted = date("Y-m-d");
+        }
+
+        // Validate $task
+        $errors = $this->validate($task);
+        if(!empty($errors)){
+            $this->throwApiProblemValidationException($errors);
         }
 
         $this->getTaskRepository()->update($task);

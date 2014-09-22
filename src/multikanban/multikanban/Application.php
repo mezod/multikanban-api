@@ -19,6 +19,13 @@ use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
 
+//Listeners
+use multikanban\multikanban\Api\ApiProblem;
+use multikanban\multikanban\Api\ApiProblemException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
+
 
 
 
@@ -32,7 +39,7 @@ class Application extends SilexApplication
         $this->configureProviders();
         $this->configureServices();
         // $this->configureSecurity();
-        // $this->configureListeners();
+        $this->configureListeners();
     }
 
     /**
@@ -130,5 +137,46 @@ class Application extends SilexApplication
         $this['api.validator'] = $this->share(function() use ($app) {
             return new ApiValidator($app['validator']);
         });
+    }
+
+    private function configureListeners(){
+
+        $app = $this;
+
+        $this->error(function(\Exception $e, $statusCode) use ($app){
+
+            // if(strpos($app['request']->getPathInfo(), '/api') !== 0){
+            //     return;
+            // }
+            
+            if($app['debug'] && $statusCode === 500){
+                return;
+            }
+
+            if($e instanceof ApiProblemException){
+                $apiProblem = $e->getApiProblem();
+            } else {
+                $apiProblem = new ApiProblem($statusCode);
+
+                if($e instanceof HttpException){
+                    $apiProblem->set('detail', $e->getMessage());
+                }
+            }
+
+            $data = $apiProblem->toArray();
+            if($data['type'] != 'about:blank'){
+                $data['type'] = 'http://localhost:800/docs/errors#'.$data['type'];
+            }
+
+            $response = new JsonResponse(
+                $data,
+                $apiProblem->getStatusCode()
+            );
+            
+            $response->headers->set('Content-Type', 'application/problem+json');
+
+            return $response;
+        });
+        
     }
 }

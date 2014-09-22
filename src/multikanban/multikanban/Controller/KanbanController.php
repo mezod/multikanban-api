@@ -40,6 +40,12 @@ class KanbanController extends BaseController{
 
         //var_dump($user);
 
+        // Validate $kanban
+        $errors = $this->validate($kanban);
+        if(!empty($errors)){
+            $this->throwApiProblemValidationException($errors);
+        }
+
     	$kanban_id = $this->getKanbanRepository()->save($kanban);
 
         //$newKanban = $this->getKanbanRepository()->findOneByUsername($user->username);
@@ -110,6 +116,12 @@ class KanbanController extends BaseController{
             $this->getKanbanRepository()->updatePositions($user_id, $kanban->position, $data['position']);
         }
         $kanban->position = $data['position'];
+
+        // Validate $kanban
+        $errors = $this->validate($kanban);
+        if(!empty($errors)){
+            $this->throwApiProblemValidationException($errors);
+        }
 
         $this->getKanbanRepository()->update($kanban);
 

@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use multikanban\multikanban\Model\User;
 use multikanban\multikanban\Repository\UserRepository;
+use multikanban\multikanban\Api\ApiProblemException;
 use multikanban\multikanban\Api\ApiProblem;
-
 
 class UserController extends BaseController{
 
@@ -27,18 +27,23 @@ class UserController extends BaseController{
 
     	$data = json_decode($request->getContent(), true);
 
+        if($data === null){
+            $apiProblem = new ApiProblem(400, ApiProblem::TYPE_INVALID_REQUEST_BODY_FORMAT);
+            
+            throw new ApiProblemException($apiProblem);  
+        } 
+
     	$user = new User();
     	$user->username = $data['username'];
     	$user->password = $data['password'];
     	$user->email = $data['email'];
         $user->registered = date("Y-m-d");
 
-        //var_dump($user);
-
         // Validate $user
         $errors = $this->validate($user);
         if(!empty($errors)){
-            return $this->handleValidationResponse($errors);
+
+            $this->throwApiProblemValidationException($errors);
         }
 
     	$this->getUserRepository()->save($user);
@@ -103,6 +108,12 @@ class UserController extends BaseController{
 
         //var_dump($user);
 
+        // Validate $user
+        $errors = $this->validate($user);
+        if(!empty($errors)){
+            $this->throwApiProblemValidationException($errors);
+        }
+
         $this->getUserRepository()->update($user);
 
         // $newUser = $this->getUserRepository()->findOneByUsername($user->username);
@@ -126,22 +137,5 @@ class UserController extends BaseController{
         $this->getUserRepository()->delete($user);
 
         return new Response(null, 204);
-    }
-
-    public function handleValidationResponse(array $errors){
-
-        $apiProblem = new ApiProblem(
-            400,
-            ApiProblem::TYPE_VALIDATION_ERROR
-        );
-        $apiProblem->set('errors', $errors);
-
-        $response = new JsonResponse(
-            $apiProblem->toArray(),
-            $apiProblem->getStatusCode()
-        );
-        $response->headers->set('Content-Type', 'application/problem+json');
-
-        return $response;
     }
 }

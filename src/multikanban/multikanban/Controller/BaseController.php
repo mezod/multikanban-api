@@ -14,10 +14,13 @@ use multikanban\multikanban\Model\User;
 use multikanban\multikanban\Model\Kanban;
 use multikanban\multikanban\Model\Task;
 use multikanban\multikanban\Model\Stats;
-// use multikanban\multikanban\Repository\UserRepository;
-// use multikanban\multikanban\Repository\ProgrammerRepository;
-// use multikanban\multikanban\Repository\ProjectRepository;
-// use multikanban\multikanban\Security\Token\ApiTokenRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use multikanban\multikanban\Api\ApiProblem;
+use multikanban\multikanban\Api\ApiProblemException;
+
+
+
+
 
 /**
  * Base controller class to hide Silex-related implementation details
@@ -87,5 +90,16 @@ abstract class BaseController implements ControllerProviderInterface
     public function validate($obj)
     {
         return $this->container['api.validator']->validate($obj);
+    }
+
+    public function throwApiProblemValidationException(array $errors){
+
+        $apiProblem = new ApiProblem(
+            400,
+            ApiProblem::TYPE_VALIDATION_ERROR
+        );
+        $apiProblem->set('errors', $errors);
+
+        throw new ApiProblemException($apiProblem);
     }
 }
