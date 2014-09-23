@@ -390,6 +390,7 @@ Resource already exists.
 - Validation errors
 - Invalid JSON errors
 - 404 errors
+- Not found errors
 
 # DISCARDED
 
