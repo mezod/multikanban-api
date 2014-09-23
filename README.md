@@ -351,6 +351,24 @@ Update task :task_id from kanban :kanban_id from user :id
 
 Delete task :task_id from kanban :kanban_id from user :id
 
+# ERRORS
+
+## 400 validation_error
+
+There was a validation error.
+
+## 400 invalid_body_format
+
+Invalid JSON format sent.
+
+## 404 not_found
+
+Resource not found.
+
+## 409 already_exists
+
+Resource already exists.
+
 # UML Class Diagram (SQL)
 
 ![](http://i.imgur.com/dlIVwYB.png)
