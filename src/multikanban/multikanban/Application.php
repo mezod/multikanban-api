@@ -7,6 +7,7 @@ use Symfony\Component\Finder\Finder;
 
 //Providers
 use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\SecurityServiceProvider;
 
 //Services
 use multikanban\multikanban\Repository\UserRepository;
@@ -38,7 +39,7 @@ class Application extends SilexApplication
         $this->configureParameters();
         $this->configureProviders();
         $this->configureServices();
-        // $this->configureSecurity();
+        $this->configureSecurity();
         $this->configureListeners();
     }
 
@@ -113,7 +114,7 @@ class Application extends SilexApplication
 
         $this['repository.user'] = $this->share(function() use ($app) {
             $repo = new UserRepository($app['db']);
-            //$repo->setEncoderFactory($app['security.encoder_factory']);
+            $repo->setEncoderFactory($app['security.encoder_factory']);
 
             return $repo;
         });
@@ -137,6 +138,25 @@ class Application extends SilexApplication
         $this['api.validator'] = $this->share(function() use ($app) {
             return new ApiValidator($app['validator']);
         });
+    }
+
+    private function configureSecurity(){
+
+        $app = $this;
+
+        $this->register(new SecurityServiceProvider(), array(
+            'security.firewalls' => array(
+                'main' => array(
+                    'pattern' => '^/',
+                    'form' => true,
+                    'users' => $this->share(function () use ($app) {
+                        return $app['repository.user'];
+                    }),
+                    'anonymous' => true,
+                    'logout' => true,
+                ),
+            )
+        ));
     }
 
     private function configureListeners(){
@@ -165,7 +185,7 @@ class Application extends SilexApplication
 
             $data = $apiProblem->toArray();
             if($data['type'] != 'about:blank'){
-                $data['type'] = 'http://localhost:800/docs/errors#'.$data['type'];
+                $data['type'] = 'http://localhost:8000/docs/errors#'.$data['type'];
             }
 
             $response = new JsonResponse(

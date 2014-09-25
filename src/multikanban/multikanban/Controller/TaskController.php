@@ -26,7 +26,10 @@ class TaskController extends BaseController{
 
     	$data = json_decode($request->getContent(), true);
 
-    	// Check that the $user_id corresponds to the actual logged in user...
+        // Check invalid json error
+        $this->checkInvalidJSON($data);
+    	
+        // Check that the $user_id corresponds to the actual logged in user...
 
     	$task = new Task();
     	$task->user_id = $user_id;
@@ -41,11 +44,8 @@ class TaskController extends BaseController{
 
         //var_dump($user);
 
-        // Validate $task
-        $errors = $this->validate($task);
-        if(!empty($errors)){
-            return $this->throwApiProblemValidationException($errors);
-        }
+        // Check validation error
+        $this->checkValidation($task);
 
     	$task_id = $this->getTaskRepository()->save($task);
 
@@ -103,9 +103,13 @@ class TaskController extends BaseController{
 
         $task = $this->getTaskRepository()->findOneById($id);
 
-        if(!$task) return new JsonResponse(array(), 200);
+        // Check not found error
+        $this->checkNotFound($task);
 
         $data = json_decode($request->getContent(), true);
+
+        // Check invalid json error
+        $this->checkInvalidJSON($data);
 
         $task->text = $data['text'];
         if($task->position != $data['position'] ||  $task->state != $data['state']){
@@ -117,11 +121,8 @@ class TaskController extends BaseController{
         	$task->dateCompleted = date("Y-m-d");
         }
 
-        // Validate $task
-        $errors = $this->validate($task);
-        if(!empty($errors)){
-            $this->throwApiProblemValidationException($errors);
-        }
+        // Check validation error
+        $this->checkValidation($task);
 
         $this->getTaskRepository()->update($task);
 
@@ -143,7 +144,8 @@ class TaskController extends BaseController{
 
         $task = $this->getTaskRepository()->findOneById($id);
 
-        if(!$task) return new Response(null, 204);
+        // Check not found error
+        $this->checkNotFound($task);
 
         $this->getTaskRepository()->updatePositionsDelete($kanban_id, $task->position);
 

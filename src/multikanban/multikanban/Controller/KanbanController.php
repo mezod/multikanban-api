@@ -28,6 +28,9 @@ class KanbanController extends BaseController{
 
     	$data = json_decode($request->getContent(), true);
 
+        // Check invalid json error
+        $this->checkInvalidJSON($data);
+
     	// Check that the $user_id corresponds to the actual logged in user...
 
     	$kanban = new Kanban();
@@ -38,13 +41,8 @@ class KanbanController extends BaseController{
     	$kanban->lastEdited = $kanban->dateCreated;
     	$kanban->position = $this->getKanbanRepository()->getKanbanPosition($user_id);
 
-        //var_dump($user);
-
-        // Validate $kanban
-        $errors = $this->validate($kanban);
-        if(!empty($errors)){
-            $this->throwApiProblemValidationException($errors);
-        }
+        // Check validation error
+        $this->checkValidation($kanban);
 
     	$kanban_id = $this->getKanbanRepository()->save($kanban);
 
@@ -84,7 +82,8 @@ class KanbanController extends BaseController{
 
         $kanban = $this->getKanbanRepository()->findOneById($id);
 
-        if(!$kanban) return new JsonResponse(array(), 200);
+        // Check not found error
+        $this->checkNotFound($kanban);
 
         $data = array(
             'id' => $kanban->id,
@@ -103,9 +102,13 @@ class KanbanController extends BaseController{
 
         $kanban = $this->getKanbanRepository()->findOneById($id);
 
-        if(!$kanban) return new JsonResponse(array(), 200);
+        // Check not found error
+        $this->checkNotFound($kanban);
 
         $data = json_decode($request->getContent(), true);
+
+        // Check invalid json error
+        $this->checkInvalidJSON($data);
 
         if($kanban->title != $data['title']){
             $kanban->title = $data['title'];
@@ -117,11 +120,8 @@ class KanbanController extends BaseController{
         }
         $kanban->position = $data['position'];
 
-        // Validate $kanban
-        $errors = $this->validate($kanban);
-        if(!empty($errors)){
-            $this->throwApiProblemValidationException($errors);
-        }
+        // Check validation error
+        $this->checkValidation($kanban);
 
         $this->getKanbanRepository()->update($kanban);
 
@@ -142,7 +142,8 @@ class KanbanController extends BaseController{
 
         $kanban = $this->getKanbanRepository()->findOneById($id);
 
-        if(!$kanban) return new Response(null, 204);
+        // Check not found error
+        $this->checkNotFound($kanban);
 
         $this->getKanbanRepository()->updatePositionsDelete($user_id, $kanban->position);
 

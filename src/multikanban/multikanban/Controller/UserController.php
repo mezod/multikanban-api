@@ -27,24 +27,17 @@ class UserController extends BaseController{
 
     	$data = json_decode($request->getContent(), true);
 
-        if($data === null){
-            $apiProblem = new ApiProblem(400, ApiProblem::TYPE_INVALID_REQUEST_BODY_FORMAT);
-            
-            throw new ApiProblemException($apiProblem);  
-        } 
+        // Check invalid json error
+        $this->checkInvalidJSON($data);
 
     	$user = new User();
     	$user->username = $data['username'];
-    	$user->password = $data['password'];
+    	$user->setPlainPassword($data['password']);
     	$user->email = $data['email'];
         $user->registered = date("Y-m-d");
 
-        // Validate $user
-        $errors = $this->validate($user);
-        if(!empty($errors)){
-
-            $this->throwApiProblemValidationException($errors);
-        }
+        // Check validation error
+        $this->checkValidation($user);
 
     	$this->getUserRepository()->save($user);
 
@@ -81,8 +74,8 @@ class UserController extends BaseController{
 
         $user = $this->getUserRepository()->findOneById($id);
 
-        //var_dump($user);
-        if(!$user) return new JsonResponse(array(), 200);
+        // Check not found error
+        $this->checkNotFound($user);
 
         $data = array(
             'id' => $user->id,
@@ -98,23 +91,27 @@ class UserController extends BaseController{
 
         $user = $this->getUserRepository()->findOneById($id);
 
-        if(!$user) return new JsonResponse(array(), 200);
+        // Check not found error
+        $this->checkNotFound($user);
 
         $data = json_decode($request->getContent(), true);
 
-        $user->username = $data['username'];
-        $user->password = $data['password'];
-        $user->email = $data['email'];
+        // Check invalid json error
+        $this->checkInvalidJSON($data);
 
-        //var_dump($user);
-
-        // Validate $user
-        $errors = $this->validate($user);
-        if(!empty($errors)){
-            $this->throwApiProblemValidationException($errors);
+        $emailChanged = false;
+        //username can't be changed
+        //$user->username = $data['username'];
+        $user->setPlainPassword($data['password']);
+        if($user->email != $data['email']){
+            $user->email = $data['email'];
+            $emailChanged = true;
         }
 
-        $this->getUserRepository()->update($user);
+        // Check validation error
+        $this->checkValidation($user);
+
+        $this->getUserRepository()->update($user, $emailChanged);
 
         // $newUser = $this->getUserRepository()->findOneByUsername($user->username);
 
@@ -132,7 +129,8 @@ class UserController extends BaseController{
 
         $user = $this->getUserRepository()->findOneById($id);
 
-        if(!$user) return new Response(null, 204);
+        // Check not found error
+        $this->checkNotFound($user);
 
         $this->getUserRepository()->delete($user);
 

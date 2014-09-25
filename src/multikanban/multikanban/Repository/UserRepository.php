@@ -7,6 +7,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use multikanban\multikanban\Model\User;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use multikanban\multikanban\Api\ApiProblemException;
+use multikanban\multikanban\Api\ApiProblem;
 
 class UserRepository extends BaseRepository implements UserProviderInterface
 {
@@ -45,6 +47,9 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         if ($user->getPlainPassword()) {
             $user->password = $this->encodePassword($user, $user->getPlainPassword());
         }
+
+        // Check already exists error
+        $this->checkAlreadyExists($user);
 
         $data = array();
         foreach($user as $key => $value){
@@ -102,11 +107,13 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         return $user;
     }
 
-    public function update($user){
+    public function update($user, $emailChanged){
 
         if ($user->getPlainPassword()) {
             $user->password = $this->encodePassword($user, $user->getPlainPassword());
         }
+
+        if($emailChanged) $this->checkEmailExists($user);
 
         $data = array();
         foreach($user as $key => $value){
@@ -122,7 +129,29 @@ class UserRepository extends BaseRepository implements UserProviderInterface
     }
 
 
+    public function checkAlreadyExists($user){
 
+        $sql = "SELECT * FROM user WHERE username = ? OR email = ?";
+        $data = $this->connection->fetchAssoc($sql, array($user->username, $user->email));
+
+        if($data){
+            $apiProblem = new ApiProblem(409, ApiProblem::TYPE_ALREADY_EXISTS);
+            
+            throw new ApiProblemException($apiProblem);  
+        } 
+    }
+
+    public function checkEmailExists($user){
+
+        $sql = "SELECT * FROM user WHERE email = ?";
+        $data = $this->connection->fetchAssoc($sql, array($user->email));
+
+        if($data){
+            $apiProblem = new ApiProblem(409, ApiProblem::TYPE_EMAIL_ALREADY_EXISTS);
+            
+            throw new ApiProblemException($apiProblem);  
+        } 
+    }
 
 
 

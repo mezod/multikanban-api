@@ -102,4 +102,31 @@ abstract class BaseController implements ControllerProviderInterface
 
         throw new ApiProblemException($apiProblem);
     }
+
+    public function checkValidation($data){
+
+        $errors = $this->validate($data);
+        if(!empty($errors)){
+
+            $this->throwApiProblemValidationException($errors);
+        }
+    }
+
+    public function checkInvalidJSON($data){
+
+        if($data === null){
+            $apiProblem = new ApiProblem(400, ApiProblem::TYPE_INVALID_REQUEST_BODY_FORMAT);
+            
+            throw new ApiProblemException($apiProblem);  
+        } 
+    }
+
+    public function checkNotFound($data){
+
+        if(!$data){
+            $apiProblem = new ApiProblem(404, ApiProblem::TYPE_NOT_FOUND);
+            
+            throw new ApiProblemException($apiProblem);  
+        } 
+    }
 }
