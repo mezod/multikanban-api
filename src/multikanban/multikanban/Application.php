@@ -92,7 +92,7 @@ class Application extends SilexApplication
             'db.options' => array(
             'dbname' => 'multikanban',
             'user' => 'root',
-            'password' => '',
+            'password' => 'root',
             'host' => 'localhost',
             'driver' => 'pdo_mysql',
             ),
