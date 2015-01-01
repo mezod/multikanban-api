@@ -47,56 +47,23 @@ class TaskController extends BaseController{
         // Check validation error
         $this->checkValidation($task);
 
-    	$task_id = $this->getTaskRepository()->save($task);
+    	$task->id = $this->getTaskRepository()->save($task);
 
-        //$newTask = $this->getTaskRepository()->findOneByUsername($user->username);
-
-        $taskArray = array(
-        	'id' => $task_id,
-            'user_id' => $task->user_id,
-            'kanban_id' => $task->kanban_id,
-            'text' => $task->text,
-            'dateCreated' => $task->dateCreated,
-            'dateCompleted' => $task->dateCompleted,
-            'position' => $task->position,
-            'state' => $task->state
-        );
-
-        return new JsonResponse($taskArray, 201);
+        return $this->createApiResponse($task, 201);
     }
 
     public function getAllAction($user_id, $kanban_id){
 
         $tasks = $this->getTaskRepository()->findAll($kanban_id);
 
-        $data = array();
-
-        foreach ($tasks as $eachTask) {
-            $eachArray = array();
-            foreach ($eachTask as $key => $value) {
-               $eachArray[$key] = $value;
-            }
-            array_push($data, $eachArray);
-        }
-
-        return new JsonResponse($data, 200);
+        return $this->createApiResponse($tasks, 200);
     }
 
     public function getCompletedAction($user_id){
 
         $completedTasks = $this->getTaskRepository()->findCompleted($user_id);
 
-        $data = array();
-
-        foreach ($completedTasks as $eachTask) {
-            $eachArray = array();
-            foreach ($eachTask as $key => $value) {
-               $eachArray[$key] = $value;
-            }
-            array_push($data, $eachArray);
-        }
-
-        return new JsonResponse($completedTasks, 200);
+        return $this->createApiResponse($completedTasks, 200);
     }
 
     public function updateAction(Request $request, $user_id, $kanban_id, $id){
@@ -126,18 +93,7 @@ class TaskController extends BaseController{
 
         $this->getTaskRepository()->update($task);
 
-        $taskArray = array(
-            'id' => $task->id,
-            'user_id' => $task->user_id,
-            'kanban_id' => $task->kanban_id,
-            'text' => $task->text,
-            'dateCreated' => $task->dateCreated,
-            'dateCompleted' => $task->dateCompleted,
-            'position' => $task->position,
-            'state' => $task->state
-        );
-
-        return new JsonResponse($taskArray, 200);
+        return $this->createApiResponse($task, 200);
     }
 
     public function deleteAction(Request $request, $user_id, $kanban_id, $id){

@@ -18,7 +18,8 @@
         "symfony/monolog-bridge": "~2.3",
         "symfony/twig-bridge": "~2.3",
         "doctrine/dbal": "~2.4.0",
-        "swiftmailer/swiftmailer": "5.*"
+        "swiftmailer/swiftmailer": "5.*",
+        "jms/serializer": "~0.16"
     },
     "autoload" : {
         "psr-0": {

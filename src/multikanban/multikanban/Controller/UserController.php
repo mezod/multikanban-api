@@ -43,31 +43,14 @@ class UserController extends BaseController{
 
         $newUser = $this->getUserRepository()->findOneByUsername($user->username);
 
-        $userArray = array(
-            'id' => $newUser->id,
-            'username' => $newUser->username,
-            'email' => $newUser->email,
-            'registered' => $newUser->registered
-        );
-
-        return new JsonResponse($userArray, 201);
+        return $this->createApiResponse($newUser, 201);
     }
 
     public function getAllAction(){
 
         $users = $this->getUserRepository()->findAll();
 
-        $data = array();
-
-        foreach ($users as $eachUser) {
-            $eachArray = array();
-            foreach ($eachUser as $key => $value) {
-               $eachArray[$key] = $value;
-            }
-            array_push($data, $eachArray);
-        }
-
-        return new JsonResponse($data, 200);
+        return $this->createApiResponse($users, 200);
     }
 
     public function getAction($id){
@@ -77,14 +60,8 @@ class UserController extends BaseController{
         // Check not found error
         $this->checkNotFound($user);
 
-        $data = array(
-            'id' => $user->id,
-            'username' => $user->username,
-            'email' => $user->email,
-            'registered' => $user->registered
-        );
+        return $this->createApiResponse($user, 200);
 
-        return new JsonResponse($data, 200);
     }
 
     public function updateAction(Request $request, $id){
@@ -102,7 +79,7 @@ class UserController extends BaseController{
         $emailChanged = false;
         //username can't be changed
         //$user->username = $data['username'];
-        $user->setPlainPassword($data['password']);
+        if(isset($data['password'])) $user->setPlainPassword($data['password']);
         if($user->email != $data['email']){
             $user->email = $data['email'];
             $emailChanged = true;
@@ -113,16 +90,7 @@ class UserController extends BaseController{
 
         $this->getUserRepository()->update($user, $emailChanged);
 
-        // $newUser = $this->getUserRepository()->findOneByUsername($user->username);
-
-        $userArray = array(
-            'id' => $user->id,
-            'username' => $user->username,
-            'email' => $user->email,
-            'registered' => $user->registered
-        );
-
-        return new JsonResponse($userArray, 200);
+        return $this->createApiResponse($user, 200);
     }
 
     public function deleteAction(Request $request, $id){

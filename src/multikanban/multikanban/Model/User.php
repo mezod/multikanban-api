@@ -4,11 +4,19 @@ namespace multikanban\multikanban\Model;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
 
+/**
+ * @Serializer\ExclusionPolicy("all")
+ */
 class User implements UserInterface
 {
 
     /* All public properties are persisted */
+
+    /**
+     * @Serializer\Expose()
+     */
     public $id;
 
     /**
@@ -18,6 +26,7 @@ class User implements UserInterface
      *      minMessage = "The username must be at least {{ limit }} characters long",
      *      maxMessage = "The username cannot be longer than {{ limit }} characters long"
      * )
+     * @Serializer\Expose()
      */
     public $username;
 
@@ -31,14 +40,18 @@ class User implements UserInterface
      */
     public $password;
 
-   /**
+    /**
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
      *     checkMX = true
      * )
+     * @Serializer\Expose()
      */
     public $email;
 
+    /**
+     * @Serializer\Expose()
+     */
     public $registered;
 
     /* non-persisted properties */

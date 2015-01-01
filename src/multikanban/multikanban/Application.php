@@ -19,6 +19,7 @@ use multikanban\multikanban\Validator\ApiValidator;
 use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 
 //Listeners
 use multikanban\multikanban\Api\ApiProblem;
@@ -137,6 +138,14 @@ class Application extends SilexApplication
 
         $this['api.validator'] = $this->share(function() use ($app) {
             return new ApiValidator($app['validator']);
+        });
+
+        $this['serializer'] = $this->share(function() use ($app) {
+            return \JMS\Serializer\SerializerBuilder::create()
+                ->setCacheDir($app['root_dir'].'/cache/serializer')
+                ->setDebug($app['debug'])
+                ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
+                ->build();
         });
     }
 

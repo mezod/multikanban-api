@@ -44,38 +44,16 @@ class KanbanController extends BaseController{
         // Check validation error
         $this->checkValidation($kanban);
 
-    	$kanban_id = $this->getKanbanRepository()->save($kanban);
+    	$kanban->id = $this->getKanbanRepository()->save($kanban);
 
-        //$newKanban = $this->getKanbanRepository()->findOneByUsername($user->username);
-
-        $kanbanArray = array(
-            'id' => $kanban_id,
-            'user_id' => $kanban->user_id,
-            'title' => $kanban->title,
-            'slug' => $kanban->slug,
-            'dateCreated' => $kanban->dateCreated,
-            'lastEdited' => $kanban->lastEdited,
-            'position' => $kanban->position
-        );
-
-        return new JsonResponse($kanbanArray, 201);
+        return $this->createApiResponse($kanban, 201);
     }
 
     public function getAllAction($user_id){
 
         $kanbans = $this->getKanbanRepository()->findAll($user_id);
 
-        $data = array();
-
-        foreach ($kanbans as $eachKanban) {
-            $eachArray = array();
-            foreach ($eachKanban as $key => $value) {
-               $eachArray[$key] = $value;
-            }
-            array_push($data, $eachArray);
-        }
-
-        return new JsonResponse($data, 200);
+        return $this->createApiResponse($kanbans, 200);
     }
 
     public function getAction($user_id, $id){
@@ -85,17 +63,7 @@ class KanbanController extends BaseController{
         // Check not found error
         $this->checkNotFound($kanban);
 
-        $data = array(
-            'id' => $kanban->id,
-            'user_id' => $kanban->user_id,
-            'title' => $kanban->title,
-            'slug' => $kanban->slug,
-            'dateCreated' => $kanban->dateCreated,
-            'lastEdited' => $kanban->lastEdited,
-            'position' => $kanban->position
-        );
-
-        return new JsonResponse($data, 200);
+        return $this->createApiResponse($kanban, 200);
     }
 
     public function updateAction(Request $request, $user_id, $id){
@@ -125,17 +93,7 @@ class KanbanController extends BaseController{
 
         $this->getKanbanRepository()->update($kanban);
 
-        $kanbanArray = array(
-            'id' => $kanban->id,
-            'user_id' => $kanban->user_id,
-            'title' => $kanban->title,
-            'slug' => $kanban->slug,
-            'dateCreated' => $kanban->dateCreated,
-            'lastEdited' => $kanban->lastEdited,
-            'position' => $kanban->position
-        );
-
-        return new JsonResponse($kanbanArray, 200);
+        return $this->createApiResponse($kanban, 200);
     }
 
     public function deleteAction(Request $request, $user_id, $id){
