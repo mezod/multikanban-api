@@ -11,13 +11,15 @@ class ApiProblem{
 	const TYPE_NOT_FOUND = 'not_found';
 	const TYPE_ALREADY_EXISTS = 'already_exists';
 	const TYPE_EMAIL_ALREADY_EXISTS = 'email_already_exists';
+	const TYPE_AUTHENTICATION_ERROR = 'authentication_error';
 
 	private static $titles = array(
 		self::TYPE_VALIDATION_ERROR => 'There was a validation error',
 		self::TYPE_INVALID_REQUEST_BODY_FORMAT => 'Invalid JSON format sent',
 		self::TYPE_NOT_FOUND => 'Resource not found',
 		self::TYPE_ALREADY_EXISTS => 'Resource already exists',
-		self::TYPE_EMAIL_ALREADY_EXISTS => 'Email already exists'
+		self::TYPE_EMAIL_ALREADY_EXISTS => 'Email already exists',
+		self::TYPE_AUTHENTICATION_ERROR => 'Invalid or missing authentication'
 	);
 
 	private $statusCode;

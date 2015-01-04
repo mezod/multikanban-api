@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use multikanban\multikanban\Model\Kanban;
 use multikanban\multikanban\Repository\KanbanRepository;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use multikanban\multikanban\Util\Util;
 
@@ -25,6 +26,10 @@ class KanbanController extends BaseController{
     }
 
    	public function createAction(Request $request, $user_id){
+
+        if(!$this->getLoggedInUser()){
+            throw new AccessDeniedException();
+        }
 
     	$data = json_decode($request->getContent(), true);
 

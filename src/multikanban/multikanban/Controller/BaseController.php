@@ -84,6 +84,27 @@ abstract class BaseController implements ControllerProviderInterface
         return $this->container['repository.stats'];
     }
 
+    /**
+     * Is the current user logged in?
+     *
+     * @return boolean
+     */
+    public function isUserLoggedIn()
+    {
+        return $this->container['security']->isGranted('IS_AUTHENTICATED_FULLY');
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getLoggedInUser()
+    {
+        if (!$this->isUserLoggedIn()) {
+            return;
+        }
+
+        return $this->container['security']->getToken()->getUser();
+    }
 
     /**
      * @param $obj

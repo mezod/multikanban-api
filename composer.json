@@ -19,7 +19,8 @@
         "symfony/twig-bridge": "~2.3",
         "doctrine/dbal": "~2.4.0",
         "swiftmailer/swiftmailer": "5.*",
-        "jms/serializer": "~0.16"
+        "jms/serializer": "~0.16",
+        "symfony/yaml": "~2.6"
     },
     "autoload" : {
         "psr-0": {

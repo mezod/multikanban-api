@@ -11,6 +11,7 @@ use multikanban\multikanban\Model\User;
 use multikanban\multikanban\Repository\UserRepository;
 use multikanban\multikanban\Api\ApiProblemException;
 use multikanban\multikanban\Api\ApiProblem;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserController extends BaseController{
 
