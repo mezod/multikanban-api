@@ -46,8 +46,8 @@ class ApiTokenProvider implements AuthenticationProviderInterface
             throw new BadCredentialsException('Invalid token');
         }
 
-        // look up the user based on the ApiToken.userId value
-        $user = $this->userRepository->find($apiToken->userId);
+        // look up the user based on the ApiToken.user_id value
+        $user = $this->userRepository->find($apiToken->user_id);
         if (!$user) {
             throw new \Exception('A token without a user? Some crazy things are happening');
         }

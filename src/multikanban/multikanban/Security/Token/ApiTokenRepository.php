@@ -7,7 +7,7 @@ use multikanban\multikanban\Model\User;
 
 class ApiTokenRepository extends BaseRepository
 {
-    const TABLE_NAME = 'api_token';
+    const TABLE_NAME = 'ApiToken';
 
     protected function getClassName()
     {
@@ -30,7 +30,7 @@ class ApiTokenRepository extends BaseRepository
 
     public function findAllForUser(User $user)
     {
-        return $this->findAllBy(array('userId' => $user->id));
+        return $this->findAllBy(array('user_id' => $user->id));
     }
 
     protected function finishHydrateObject($obj)
@@ -47,6 +47,6 @@ class ApiTokenRepository extends BaseRepository
      */
     protected function createObject($class, array $data)
     {
-        return new $class($data['userId']);
+        return new $class($data['user_id']);
     }
 } 

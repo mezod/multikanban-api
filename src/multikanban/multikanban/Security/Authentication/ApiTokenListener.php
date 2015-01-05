@@ -32,7 +32,7 @@ class ApiTokenListener implements ListenerInterface
     }
 
     public function handle(GetResponseEvent $event)
-    {
+    { 
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
             return;
         }
@@ -47,6 +47,8 @@ class ApiTokenListener implements ListenerInterface
         // format should be "Authorization: token ABCDEFG"
         $authorizationHeader = $request->headers->get('Authorization');
         $tokenString = $this->parseAuthorizationHeader($authorizationHeader);
+
+        var_dump($tokenString);
 
         if (!$tokenString) {
             // there's no authentication info for us to process
