@@ -20,6 +20,9 @@ use multikanban\multikanban\Api\ApiProblem;
 use multikanban\multikanban\Api\ApiProblemException;
 use JMS\Serializer\SerializationContext;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+
 
 
 
@@ -171,5 +174,32 @@ abstract class BaseController implements ControllerProviderInterface
         ));
 
         return $response;
+    }
+
+    protected function enforceUserSecurity(){
+
+        if(!$this->getLoggedInUser()){
+            throw new AccessDeniedException();
+        }
+    }
+
+    // Checks that the logged in user is authorized to manipulate the resource
+    public function enforceUserOwnershipSecurity($request_id, $resource_id = null){
+
+        $this->enforceUserSecurity();
+
+        if($resource_id){
+
+            $logged_id = $this->getLoggedInUser()->id;
+
+            if($request_id != $logged_id || $resource_id != $logged_id){
+                throw new AccessDeniedException();
+            }
+        }else{
+
+            if($request_id != $this->getLoggedInUser()->id){
+                throw new AccessDeniedException();
+            }
+        }
     }
 }

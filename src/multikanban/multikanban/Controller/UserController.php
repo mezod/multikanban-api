@@ -49,12 +49,16 @@ class UserController extends BaseController{
 
     public function getAllAction(){
 
+        // THIS SHOULDN'T BE PUBLIC
+
         $users = $this->getUserRepository()->findAll();
 
         return $this->createApiResponse($users, 200);
     }
 
     public function getAction($id){
+
+        $this->enforceUserOwnershipSecurity($id);
 
         $user = $this->getUserRepository()->findOneById($id);
 
@@ -66,6 +70,8 @@ class UserController extends BaseController{
     }
 
     public function updateAction(Request $request, $id){
+
+        $this->enforceUserOwnershipSecurity($id);
 
         $user = $this->getUserRepository()->findOneById($id);
 
@@ -95,6 +101,8 @@ class UserController extends BaseController{
     }
 
     public function deleteAction(Request $request, $id){
+
+        $this->enforceUserOwnershipSecurity($id);
 
         $user = $this->getUserRepository()->findOneById($id);
 

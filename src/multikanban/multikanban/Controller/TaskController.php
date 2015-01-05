@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use multikanban\multikanban\Model\Task;
 use multikanban\multikanban\Repository\TaskRepository;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 class TaskController extends BaseController{
@@ -23,6 +24,8 @@ class TaskController extends BaseController{
     }
 
    	public function createAction(Request $request, $user_id, $kanban_id){
+
+        $this->enforceUserOwnershipSecurity($user_id);
 
     	$data = json_decode($request->getContent(), true);
 
@@ -54,12 +57,16 @@ class TaskController extends BaseController{
 
     public function getAllAction($user_id, $kanban_id){
 
+        $this->enforceUserOwnershipSecurity($user_id);
+
         $tasks = $this->getTaskRepository()->findAll($kanban_id);
 
         return $this->createApiResponse($tasks, 200);
     }
 
     public function getCompletedAction($user_id){
+
+        $this->enforceUserOwnershipSecurity($user_id);
 
         $completedTasks = $this->getTaskRepository()->findCompleted($user_id);
 
@@ -72,6 +79,8 @@ class TaskController extends BaseController{
 
         // Check not found error
         $this->checkNotFound($task);
+
+        $this->enforceUserOwnershipSecurity($user_id, $task->user_id);
 
         $data = json_decode($request->getContent(), true);
 
@@ -102,6 +111,8 @@ class TaskController extends BaseController{
 
         // Check not found error
         $this->checkNotFound($task);
+
+        $this->enforceUserOwnershipSecurity($user_id, $task->user_id);
 
         $this->getTaskRepository()->updatePositionsDelete($kanban_id, $task->position);
 

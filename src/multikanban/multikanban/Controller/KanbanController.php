@@ -27,9 +27,7 @@ class KanbanController extends BaseController{
 
    	public function createAction(Request $request, $user_id){
 
-        if(!$this->getLoggedInUser()){
-            throw new AccessDeniedException();
-        }
+        $this->enforceUserOwnershipSecurity($user_id);
 
     	$data = json_decode($request->getContent(), true);
 
@@ -56,6 +54,8 @@ class KanbanController extends BaseController{
 
     public function getAllAction($user_id){
 
+        $this->enforceUserOwnershipSecurity($user_id);
+
         $kanbans = $this->getKanbanRepository()->findAll($user_id);
 
         return $this->createApiResponse($kanbans, 200);
@@ -68,6 +68,8 @@ class KanbanController extends BaseController{
         // Check not found error
         $this->checkNotFound($kanban);
 
+        $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id);
+
         return $this->createApiResponse($kanban, 200);
     }
 
@@ -77,6 +79,8 @@ class KanbanController extends BaseController{
 
         // Check not found error
         $this->checkNotFound($kanban);
+
+        $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id);
 
         $data = json_decode($request->getContent(), true);
 
@@ -108,10 +112,13 @@ class KanbanController extends BaseController{
         // Check not found error
         $this->checkNotFound($kanban);
 
+        $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id);
+
         $this->getKanbanRepository()->updatePositionsDelete($user_id, $kanban->position);
 
         $this->getKanbanRepository()->delete($kanban);
 
         return new Response(null, 204);
     }
+
 }

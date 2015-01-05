@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use multikanban\multikanban\Model\Stats;
 use multikanban\multikanban\Repository\StatsRepository;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 class StatsController extends BaseController{
@@ -36,6 +37,8 @@ class StatsController extends BaseController{
 
    	public function getUserStatsAction($user_id){
 
+      $this->enforceUserSecurity();
+
    		$stats = $this->getStatsRepository()->getUserStats($user_id);
 
    		$statsArray = array(
@@ -48,6 +51,8 @@ class StatsController extends BaseController{
    	}
 
    	public function getKanbanStatsAction($kanban_id){
+
+      $this->enforceUserSecurity();
 
    		$stats = $this->getStatsRepository()->getKanbanStats($kanban_id);
 

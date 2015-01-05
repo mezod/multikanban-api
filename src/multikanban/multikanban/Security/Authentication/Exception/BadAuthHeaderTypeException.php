@@ -1,8 +1,8 @@
 <?php
 
-namespace KnpU\CodeBattle\Security\Authentication\Exception;
+namespace multikanban\multikanban\Security\Authentication\Exception;
 
-use KnpU\CodeBattle\Security\Authentication\ApiTokenListener;
+use multikanban\multikanban\Security\Authentication\ApiTokenListener;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class BadAuthHeaderTypeException extends AuthenticationException
