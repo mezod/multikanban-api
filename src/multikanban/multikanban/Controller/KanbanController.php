@@ -29,17 +29,12 @@ class KanbanController extends BaseController{
 
         $this->enforceUserOwnershipSecurity($user_id);
 
-    	$data = json_decode($request->getContent(), true);
-
-        // Check invalid json error
-        $this->checkInvalidJSON($data);
-
-    	// Check that the $user_id corresponds to the actual logged in user...
+    	$data = $this->decodeRequestBodyIntoParameters($request);
 
     	$kanban = new Kanban();
     	$kanban->user_id = $user_id;
-    	$kanban->title = $data['title'];
-        $kanban->slug = Util::slugify($data['title']);
+    	$kanban->title = $data->get('title');
+        $kanban->slug = Util::slugify($data->get('title'));
     	$kanban->dateCreated = date("Y-m-d");
     	$kanban->lastEdited = $kanban->dateCreated;
     	$kanban->position = $this->getKanbanRepository()->getKanbanPosition($user_id);
@@ -75,6 +70,8 @@ class KanbanController extends BaseController{
 
     public function updateAction(Request $request, $user_id, $id){
 
+        $data = $this->decodeRequestBodyIntoParameters($request);
+
         $kanban = $this->getKanbanRepository()->findOneById($id);
 
         // Check not found error
@@ -82,30 +79,31 @@ class KanbanController extends BaseController{
 
         $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id);
 
-        $data = json_decode($request->getContent(), true);
-
-        // Check invalid json error
-        $this->checkInvalidJSON($data);
-
-        if($kanban->title != $data['title']){
-            $kanban->title = $data['title'];
-            $kanban->slug = Util::slugify($data['title']);
+        $title = $data->get('title');
+        if($kanban->title != $title){
+            $kanban->title = $title;
+            $kanban->slug = Util::slugify($title);
         }
 
-        if($kanban->position != $data['position']){
-            $this->getKanbanRepository()->updatePositions($user_id, $kanban->position, $data['position']);
-        }
-        $kanban->position = $data['position'];
+        $positionChanged = false;
+        $position = $data->get('position');
+        if($kanban->position != $position){
+            $positionChanged = true; 
+            $oldPosition = $kanban->position;
+            $kanban->position = $position;
+        } 
 
         // Check validation error
         $this->checkValidation($kanban);
 
+        if($positionChanged) $this->getKanbanRepository()->updatePositions($user_id, $oldPosition, $kanban->position);
         $this->getKanbanRepository()->update($kanban);
+
 
         return $this->createApiResponse($kanban, 200);
     }
 
-    public function deleteAction(Request $request, $user_id, $id){
+    public function deleteAction($user_id, $id){
 
         $kanban = $this->getKanbanRepository()->findOneById($id);
 

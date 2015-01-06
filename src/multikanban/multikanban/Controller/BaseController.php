@@ -19,13 +19,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use multikanban\multikanban\Api\ApiProblem;
 use multikanban\multikanban\Api\ApiProblemException;
 use JMS\Serializer\SerializationContext;
-
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-
-
-
-
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Base controller class to hide Silex-related implementation details
@@ -138,15 +133,6 @@ abstract class BaseController implements ControllerProviderInterface
         }
     }
 
-    public function checkInvalidJSON($data){
-
-        if($data === null){
-            $apiProblem = new ApiProblem(400, ApiProblem::TYPE_INVALID_REQUEST_BODY_FORMAT);
-            
-            throw new ApiProblemException($apiProblem);  
-        } 
-    }
-
     public function checkNotFound($data){
 
         if(!$data){
@@ -184,22 +170,49 @@ abstract class BaseController implements ControllerProviderInterface
     }
 
     // Checks that the logged in user is authorized to manipulate the resource
-    public function enforceUserOwnershipSecurity($request_id, $resource_id = null){
+    public function enforceUserOwnershipSecurity($request_id, $kanban_u_id = null, $task_u_id = null){
 
         $this->enforceUserSecurity();
 
-        if($resource_id){
+        $logged_id = $this->getLoggedInUser()->id;
 
-            $logged_id = $this->getLoggedInUser()->id;
+        if($kanban_u_id){
+            if($task_u_id){
 
-            if($request_id != $logged_id || $resource_id != $logged_id){
-                throw new AccessDeniedException();
+                if($request_id != $logged_id || $kanban_u_id != $logged_id || $task_u_id != $logged_id){
+                    throw new AccessDeniedException();
+                }
+            }else{
+            
+                if($request_id != $logged_id || $kanban_u_id != $logged_id){
+                    throw new AccessDeniedException();
+                }
             }
         }else{
 
-            if($request_id != $this->getLoggedInUser()->id){
+            if($request_id != $logged_id){
                 throw new AccessDeniedException();
             }
         }
+    }
+
+    protected function decodeRequestBodyIntoParameters(Request $request)
+    {
+        // allow for a possibly empty body
+        if (!$request->getContent()) {
+            $data = array();
+        } else {
+            $data = json_decode($request->getContent(), true);
+
+            if ($data === null) {
+                $problem = new ApiProblem(
+                    400,
+                    ApiProblem::TYPE_INVALID_REQUEST_BODY_FORMAT
+                );
+                throw new ApiProblemException($problem);
+            }
+        }
+
+        return new ParameterBag($data);
     }
 }

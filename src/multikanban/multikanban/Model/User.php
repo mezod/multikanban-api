@@ -20,6 +20,7 @@ class User implements UserInterface
     public $id;
 
     /**
+     * @Assert\NotBlank(message="Username cannot be empty.")
      * @Assert\Length(
      *      min = 3,
      *      max = 16,
@@ -31,9 +32,10 @@ class User implements UserInterface
     public $username;
 
     /**
+     * @Assert\NotBlank(message="Password cannot be empty.")
      * @Assert\Length(
      *      min = 8,
-     *      max = 25,
+     *      max = 26,
      *      minMessage = "The password must be at least {{ limit }} characters long",
      *      maxMessage = "The password cannot be longer than {{ limit }} characters long"
      * )
@@ -41,6 +43,7 @@ class User implements UserInterface
     public $password;
 
     /**
+     * @Assert\NotBlank(message="Email cannot be empty.")
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
      *     checkMX = true

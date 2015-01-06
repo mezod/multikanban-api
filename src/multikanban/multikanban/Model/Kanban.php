@@ -25,5 +25,8 @@ class Kanban
 
     public $lastEdited;
 
+    /**
+    * @Assert\NotBlank(message="Position cannot be empty.")
+    */
     public $position;
 }

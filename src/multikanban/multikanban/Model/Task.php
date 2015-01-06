@@ -28,7 +28,13 @@ class Task
 
     public $dateCompleted;
 
+    /**
+    * @Assert\NotBlank(message="Position cannot be empty.")
+    */
     public $position;
 
+    /**
+    * @Assert\NotBlank(message="State cannot be empty.")
+    */
     public $state;
 }

@@ -13,6 +13,7 @@ use multikanban\multikanban\Api\ApiProblemException;
 use multikanban\multikanban\Api\ApiProblem;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+
 class UserController extends BaseController{
 
     protected function addRoutes(ControllerCollection $controllers){
@@ -26,15 +27,12 @@ class UserController extends BaseController{
 
     public function createAction(Request $request){
 
-    	$data = json_decode($request->getContent(), true);
-
-        // Check invalid json error
-        $this->checkInvalidJSON($data);
+    	$data = $this->decodeRequestBodyIntoParameters($request);
 
     	$user = new User();
-    	$user->username = $data['username'];
-    	$user->setPlainPassword($data['password']);
-    	$user->email = $data['email'];
+    	$user->username = $data->get('username');
+    	$user->setPlainPassword($data->get('password'));
+    	$user->email = $data->get('email');
         $user->registered = date("Y-m-d");
 
         // Check validation error
@@ -71,6 +69,8 @@ class UserController extends BaseController{
 
     public function updateAction(Request $request, $id){
 
+        $data = $this->decodeRequestBodyIntoParameters($request);
+
         $this->enforceUserOwnershipSecurity($id);
 
         $user = $this->getUserRepository()->findOneById($id);
@@ -78,17 +78,11 @@ class UserController extends BaseController{
         // Check not found error
         $this->checkNotFound($user);
 
-        $data = json_decode($request->getContent(), true);
-
-        // Check invalid json error
-        $this->checkInvalidJSON($data);
-
         $emailChanged = false;
-        //username can't be changed
-        //$user->username = $data['username'];
-        if(isset($data['password'])) $user->setPlainPassword($data['password']);
-        if($user->email != $data['email']){
-            $user->email = $data['email'];
+
+        if($data->has('password')) $user->setPlainPassword($data->get('password'));
+        if($data->has('email') && $user->email != $data->get('email')){
+            $user->email = $data->get('email');
             $emailChanged = true;
         }
 
@@ -100,7 +94,7 @@ class UserController extends BaseController{
         return $this->createApiResponse($user, 200);
     }
 
-    public function deleteAction(Request $request, $id){
+    public function deleteAction($id){
 
         $this->enforceUserOwnershipSecurity($id);
 

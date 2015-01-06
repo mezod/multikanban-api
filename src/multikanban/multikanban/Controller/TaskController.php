@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use multikanban\multikanban\Model\Task;
 use multikanban\multikanban\Repository\TaskRepository;
+use multikanban\multikanban\Repository\KanbanRepository;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
@@ -25,27 +26,23 @@ class TaskController extends BaseController{
 
    	public function createAction(Request $request, $user_id, $kanban_id){
 
-        $this->enforceUserOwnershipSecurity($user_id);
+        $data = $this->decodeRequestBodyIntoParameters($request);
 
-    	$data = json_decode($request->getContent(), true);
-
-        // Check invalid json error
-        $this->checkInvalidJSON($data);
+        //Check user owns kanban
+        $kanban = $this->getKanbanRepository()->findOneById($kanban_id);
+        $this->checkNotFound($kanban);
+        $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id);
     	
-        // Check that the $user_id corresponds to the actual logged in user...
-
     	$task = new Task();
     	$task->user_id = $user_id;
     	$task->kanban_id = $kanban_id;
-    	$task->text = $data['text'];
+    	$task->text = $data->get('text');
     	$task->dateCreated = date("Y-m-d");
     	$task->dateCompleted = null;
     	$task->position = 0;
     	$task->state = 'backlog';
 
         $this->getTaskRepository()->increaseBacklogPosition($kanban_id);
-
-        //var_dump($user);
 
         // Check validation error
         $this->checkValidation($task);
@@ -56,6 +53,10 @@ class TaskController extends BaseController{
     }
 
     public function getAllAction($user_id, $kanban_id){
+
+        $kanban = $this->getKanbanRepository()->findOneById($kanban_id);
+        $this->checkNotFound($kanban);
+        $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id);
 
         $this->enforceUserOwnershipSecurity($user_id);
 
@@ -75,31 +76,38 @@ class TaskController extends BaseController{
 
     public function updateAction(Request $request, $user_id, $kanban_id, $id){
 
+        $data = $this->decodeRequestBodyIntoParameters($request);
+
         $task = $this->getTaskRepository()->findOneById($id);
 
         // Check not found error
         $this->checkNotFound($task);
 
-        $this->enforceUserOwnershipSecurity($user_id, $task->user_id);
+        $kanban = $this->getKanbanRepository()->findOneById($kanban_id);
+        $this->checkNotFound($kanban);
+        $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id, $task->user_id);
 
-        $data = json_decode($request->getContent(), true);
+        $task->text = $data->get('text');
 
-        // Check invalid json error
-        $this->checkInvalidJSON($data);
-
-        $task->text = $data['text'];
-        if($task->position != $data['position'] ||  $task->state != $data['state']){
-            $this->getTaskRepository()->updatePositions($kanban_id, $task->position, $data['position'], $task->state, $data['state']);
+        $positionOrStateChanged = false;
+        $position = $data->get('position');
+        $state = $data->get('state');
+        if($task->position != $position ||  $task->state != $state){
+            $positionOrStateChanged = true;
+            $oldPosition = $task->position;
+            $oldState = $task->state;
+            $task->position = $position;
+            $task->state = $state;
         }
-        $task->position = $data['position'];
-        $task->state = $data['state'];
-        if(!$task->dateCompleted && ($data['state'] == 'done' || $data['state'] == 'archive')){
+        
+        if(!$task->dateCompleted && ($state == 'done' || $state == 'archive')){
         	$task->dateCompleted = date("Y-m-d");
         }
 
         // Check validation error
         $this->checkValidation($task);
 
+        if($positionOrStateChanged) $this->getTaskRepository()->updatePositions($kanban_id, $oldPosition, $task->position, $oldState, $task->state);
         $this->getTaskRepository()->update($task);
 
         return $this->createApiResponse($task, 200);
@@ -112,7 +120,9 @@ class TaskController extends BaseController{
         // Check not found error
         $this->checkNotFound($task);
 
-        $this->enforceUserOwnershipSecurity($user_id, $task->user_id);
+        $kanban = $this->getKanbanRepository()->findOneById($kanban_id);
+        $this->checkNotFound($kanban);
+        $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id, $task->user_id);
 
         $this->getTaskRepository()->updatePositionsDelete($kanban_id, $task->position);
 
