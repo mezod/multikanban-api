@@ -34,25 +34,35 @@ Stores and updates information about users of the app.
 
 Stores and updates information about users' kanban boards.
   
-| Endpoint | Description |
-| ---- | --------------- |
-| [POST /users/:id/kanbans](#post-kanbans) | Create a kanban for user :id |
-| [GET /users/:id/kanbans](#get-kanbans) | Get all kanbans from user :id |
-| [GET /users/:id/kanbans/:kanban_id](#get-kanban) | Get kanban :kanban_id from user :id |
-| [PUT /users/:id/kanbans/:kanban_id](#put-kanban) | Update kanban :kanban_id from user :id |
-| [DELETE /users/:id/kanbans/:kanban_id](#delete-kanban) | Delete kanban :kanban_id from user :id |
+| Endpoint | Description | Requires Auth |
+| ---- | --------------- | ---- |
+| [POST /users/:id/kanbans](#post-kanbans) | Create a kanban for user :id | yes |
+| [GET /users/:id/kanbans](#get-kanbans) | Get all kanbans from user :id | yes |
+| [GET /users/:id/kanbans/:kanban_id](#get-kanban) | Get kanban :kanban_id from user :id | yes |
+| [PUT /users/:id/kanbans/:kanban_id](#put-kanban) | Update kanban :kanban_id from user :id | yes |
+| [DELETE /users/:id/kanbans/:kanban_id](#delete-kanban) | Delete kanban :kanban_id from user :id | yes |
 
 ### TASKS
 
 Stores and updates information about users' kanban board's tasks.
 
-| Endpoint | Description |
-| ---- | --------------- |
-| [POST /users/:id/kanbans/:kanban_id/tasks](#post-tasks) | Create a task in kanban :kanban_id of user :id |
-| [GET /users/:id/kanbans/:kanban_id/tasks](#get-tasks) | Get all tasks from kanban :kanban_id from user :id |
-| [GET /users/:id/completedtasks](#get-completed-tasks) | Get all completed tasks from user :id |
-| [PUT /users/:id/kanbans/:kanban_id/tasks/:task_id](#put-task) | Update task :task_id from kanban :kanban_id from user :id |
-| [DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id](#delete-task) | Delete task :task_id from kanban :kanban_id from user :id |
+| Endpoint | Description | Requires Auth |
+| ---- | --------------- | ---- |
+| [POST /users/:id/kanbans/:kanban_id/tasks](#post-tasks) | Create a task in kanban :kanban_id of user :id | yes |
+| [GET /users/:id/kanbans/:kanban_id/tasks](#get-tasks) | Get all tasks from kanban :kanban_id from user :id | yes |
+| [GET /users/:id/completedtasks](#get-completed-tasks) | Get all completed tasks from user :id | yes |
+| [PUT /users/:id/kanbans/:kanban_id/tasks/:task_id](#put-task) | Update task :task_id from kanban :kanban_id from user :id | yes |
+| [DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id](#delete-task) | Delete task :task_id from kanban :kanban_id from user :id | yes |
+
+### TOKENS
+
+Stores information about users' tokens.
+
+| Endpoint | Description | Requires Auth |
+| ---- | --------------- | ---- |
+| [POST /tokens](#post-tokens) | Create a token of loggedIn user via Basic Auth | yes (Basic Auth) |
+
+## Endpoints
 
 ### STATS
 
@@ -73,6 +83,8 @@ Response:
 
 Get stats for user :id; number of kanban boards, tasks and completed tasks
 
+Requires authorization via token
+
 Response:
 
     {
@@ -86,6 +98,8 @@ Response:
 Get stats for kanban :kanban_id; number of tasks and completed tasks
 
 Completed tasks are the sum of the "done" and "archive" columns of the kanban board
+
+Requires authorization via token
 
 Response:
 
@@ -107,7 +121,16 @@ Request:
       "password" : "my_password",
       "email" : "mezod@me.zod"
     }
+
+Response:
   
+    {
+        "id": "1",
+        "nickname": "mezod",
+        "email": "mezod@me.zod",
+        "registered": "31/08/2014",
+    }
+    
 #### GET /users
 
 Get all users.
@@ -137,6 +160,8 @@ Response:
 
 Get user :id data.
 
+Requires authorization via token
+
 Response:
 
     {
@@ -149,6 +174,15 @@ Response:
 #### <a name="put-user"></a>PUT /users/:id
 
 Update user :id data.
+
+Requires authorization via token
+
+Request:
+
+    {
+      "password" : "password",
+      "email" : "wololo@gmail.com"
+    }
 
 Response:
 
@@ -163,6 +197,8 @@ Response:
 
 Delete user :id.
 
+Requires authorization via token
+
 Response:
 
 No Content
@@ -172,6 +208,16 @@ No Content
 #### <a name="post-kanbans"></a>POST /users/:id/kanbans
 
 Create a kanban for user :id
+
+Requires authorization via token
+
+Request:
+
+    {
+       "title": "Summer trip"
+    }
+
+Response: 
 
     {
         "user_id": "1",
@@ -183,10 +229,15 @@ Create a kanban for user :id
 
 Get all kanbans from user :id
 
+Requires authorization via token
+
+Response:
+
     {
         "id": "1",
         "user_id": "1",
         "title": "Summer trip",
+        "slug": "summer-trip",
         "dateCreated": "01/09/2014",
         "lastEdited": "01/09/2014",
         "position": "0",
@@ -195,6 +246,7 @@ Get all kanbans from user :id
         "id": "2",
         "user_id": "1",
         "title": "Personal blog",
+        "slug": "personal-blog",
         "dateCreated": "31/08/2014",
         "lastEdited": "01/09/2014",
         "position": "1",
@@ -203,6 +255,7 @@ Get all kanbans from user :id
         "id": "3",
         "user_id": "1",
         "title": "Thesis",
+        "slug": "thesis",
         "dateCreated": "31/09/2014",
         "lastEdited": "01/09/2014",
         "position": "2",
@@ -212,10 +265,15 @@ Get all kanbans from user :id
 
 Get kanban :kanban_id from user :id
 
+Requires authorization via token
+
+Response:
+
     {
         "id": "3",
         "user_id": "1",
         "title": "Thesis",
+        "slug": "thesis",
         "dateCreated": "31/09/2014",
         "lastEdited": "01/09/2014",
         "position": "2",
@@ -225,6 +283,8 @@ Get kanban :kanban_id from user :id
 
 Update kanban :kanban_id from user :id
 
+Requires authorization via token
+
 Request:
 
     {
@@ -232,9 +292,24 @@ Request:
         "position": "2"
     }
 
+Response:
+
+    {
+        "id": "6",
+        "user_id": "2",
+        "title": "Master's Thesis",
+        "slug": "master-s-thesis",
+        "dateCreated": "2014-08-31",
+        "lastEdited": "2015-01-01",
+        "position": "2"
+    }
+
+
 #### <a name="delete-kanban"></a>DELETE /users/:id/kanbans/:kanban_id
 
 Delete kanban :kanban_id from user :id
+
+Requires authorization via token
 
 ### TASKS
 
@@ -242,17 +317,34 @@ Delete kanban :kanban_id from user :id
 
 Create a task in kanban :kanban_id of user :id
 
+Requires authorization via token
+
+Request:
+
     {
+      "text": "Write the abstract"
+    }
+    
+Response:
+
+    {
+      "id": "12",
       "user_id": "1",
       "kanban_id": "3",
       "text": "Write the abstract",
-      "position": "0",
-      "column": "backlog"
+      "dateCreated": "2015-01-07",
+      "dateCompleted": null,
+      "position": 0,
+      "state": "backlog"
     }
 
 #### <a name="get-tasks"></a>GET /users/:id/kanbans/:kanban_id/tasks
 
 Get all tasks from kanban :kanban_id from user :id
+
+Requires authorization via token
+
+Response:
 
     {
       "id": "1",
@@ -260,8 +352,9 @@ Get all tasks from kanban :kanban_id from user :id
       "kanban_id": "3",
       "text": "write the abstract",
       "dateCreated": "31/08/2014",
+      "dateCompleted": null,
       "position": "0",
-      "column": "backlog"
+      "state": "backlog"
     },
     {
       "id": "2",
@@ -269,8 +362,9 @@ Get all tasks from kanban :kanban_id from user :id
       "kanban_id": "3",
       "text": "meet supervisor",
       "dateCreated": "31/08/2014",
+      "dateCompleted": null,
       "position": "1",
-      "column": "backlog"
+      "state": "backlog"
     },
     {
       "id": "3",
@@ -280,7 +374,7 @@ Get all tasks from kanban :kanban_id from user :id
       "dateCreated": "31/08/2014",
       "dateCompleted": "01/09/2014"
       "position": "0",
-      "column": "done"
+      "state": "done"
     },
     {
       "id": "4",
@@ -288,8 +382,9 @@ Get all tasks from kanban :kanban_id from user :id
       "kanban_id": "3",
       "text": "install latex",
       "dateCreated": "31/08/2014",
+      "dateCompleted": null,
       "position": "0",
-      "column": "to do"
+      "state": "to do"
     },
     {
       "id": "5",
@@ -297,8 +392,9 @@ Get all tasks from kanban :kanban_id from user :id
       "kanban_id": "3",
       "text": "book lab",
       "dateCreated": "31/08/2014",
+      "dateCompleted": null,
       "position": "0",
-      "column": "doing"
+      "state": "doing"
     },
     {
       "id": "6",
@@ -308,13 +404,16 @@ Get all tasks from kanban :kanban_id from user :id
       "dateCreated": "17/08/2014",
       "dateCompleted": "24/08/2014"
       "position": "0",
-      "column": "archive"
+      "state": "archive"
     }
-    
 
 #### <a name="get-completed-tasks"></a>GET /users/:id/completedtasks
 
 Get all completed tasks from user :id
+
+Requires authorization via token
+
+Response:
 
      {
       "id": "3",
@@ -324,7 +423,7 @@ Get all completed tasks from user :id
       "dateCreated": "31/08/2014",
       "dateCompleted": "01/09/2014"
       "position": "0",
-      "column": "done"
+      "state": "done"
     },
     {
       "id": "6",
@@ -334,22 +433,57 @@ Get all completed tasks from user :id
       "dateCreated": "17/08/2014",
       "dateCompleted": "24/08/2014"
       "position": "0",
-      "column": "archive"
+      "state": "archive"
     }
 
 #### <a name="put-task"></a>PUT /users/:id/kanbans/:kanban_id/tasks/:task_id
 
 Update task :task_id from kanban :kanban_id from user :id
 
+Requires authorization via token
+
+Request:
+
     {
       "text": "write the abstract",
       "position": "1",
-      "column": "to do"
-    },
+      "state": "to do"
+    }
+
+Response:
+
+    {
+      "id": "13",
+      "user_id": "2",
+      "kanban_id": "7",
+      "text": "write the abstract",
+      "dateCreated": "2015-01-06",
+      "dateCompleted": "2015-01-06",
+      "position": "1",
+      "state": "to do"
+    }
 
 #### <a name="delete-task"></a>DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id
 
 Delete task :task_id from kanban :kanban_id from user :id
+
+Requires authorization via token
+
+### TOKENS
+
+#### <a name="post-tokens"></a>POST /tokens
+
+Requires authorization via Basic Auth
+
+Request:
+
+    {
+      "notes" : "token for the meezod"
+    }
+
+Response:
+
+TO DO
 
 # ERRORS
 
@@ -361,6 +495,10 @@ There was a validation error.
 
 Invalid JSON format sent.
 
+## 401 authentication_error
+
+Invalid or missing authentication
+
 ## 404 not_found
 
 Resource not found.
@@ -368,6 +506,11 @@ Resource not found.
 ## 409 already_exists
 
 Resource already exists.
+
+## 409 email_already_exists
+
+Email already exists.
+
 
 # UML Class Diagram (SQL)
 
@@ -384,13 +527,6 @@ Resource already exists.
 - Behat
 - Exception handling
 - DBAL Annotations
-
-## ERROR HANDLING
-
-- Validation errors
-- Invalid JSON errors
-- 404 errors
-- Not found errors
 
 # DISCARDED
 
