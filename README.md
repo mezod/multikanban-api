@@ -12,23 +12,23 @@ A simple kanban for multiple personal projects.
 
 Stores and updates information about stats of the app.
 
-| Endpoint | Description |
-| ---- | --------------- |
-| [GET /stats](#get-stats) | Get app stats; total number of users, kanban boards, tasks and completed tasks for the app  |
-| [GET /users/:id/stats](#get-user-stats) | Get stats for user :id; number of kanban boards, tasks and completed tasks |
-| [GET /kanbans/:kanban_id/stats](#get-kanban-stats) | Get stats for kanban :kanban_id; number of tasks and completed tasks |
+| Endpoint | Description | Requires Auth |
+| ---- | --------------- | ---- |
+| [GET /stats](#get-stats) | Get app stats; total number of users, kanban boards, tasks and completed tasks for the app  | no |
+| [GET /users/:id/stats](#get-user-stats) | Get stats for user :id; number of kanban boards, tasks and completed tasks | yes |
+| [GET /kanbans/:kanban_id/stats](#get-kanban-stats) | Get stats for kanban :kanban_id; number of tasks and completed tasks | yes |
 
 ### USERS
 
 Stores and updates information about users of the app.
 
-| Endpoint | Description |
-| ---- | --------------- |
-| [POST /users](#post-users) | Create a user |
-| [GET /users](#get-users) | Get all users |
-| [GET /users/:id](#get-user) | Get user :id data |
-| [PUT /users/:id](#put-user) | Update user's data |
-| [DELETE /users/:id](#delete-user) | Delete user |
+| Endpoint | Description | Requires Auth |
+| ---- | --------------- | ---- |
+| [POST /users](#post-users) | Create a user | no |
+| [GET /users](#get-users) | Get all users | no |
+| [GET /users/:id](#get-user) | Get user :id data | yes |
+| [PUT /users/:id](#put-user) | Update user's data | yes |
+| [DELETE /users/:id](#delete-user) | Delete user | yes |
   
 ### KANBANS
 
