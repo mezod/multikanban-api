@@ -12,6 +12,7 @@ use multikanban\multikanban\Repository\UserRepository;
 use multikanban\multikanban\Api\ApiProblemException;
 use multikanban\multikanban\Api\ApiProblem;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use multikanban\multikanban\Security\Token\ApiToken;
 
 
 class UserController extends BaseController{
@@ -41,6 +42,9 @@ class UserController extends BaseController{
     	$this->getUserRepository()->save($user);
 
         $newUser = $this->getUserRepository()->findOneByUsername($user->username);
+
+        // $token = $this->newToken($newUser->id);
+        // $newUser->token = $token;
 
         return $this->createApiResponse($newUser, 201);
     }
@@ -106,5 +110,16 @@ class UserController extends BaseController{
         $this->getUserRepository()->delete($user);
 
         return new Response(null, 204);
+    }
+
+
+    public function newToken($user_id)
+    {
+        $token = new ApiToken($user_id);
+        $token->notes = "default";
+
+        $this->getApiTokenRepository()->save($token);
+
+        return $token->token;
     }
 }

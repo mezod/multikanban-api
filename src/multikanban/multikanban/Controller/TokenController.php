@@ -11,11 +11,15 @@ class TokenController extends BaseController
 {
     protected function addRoutes(ControllerCollection $controllers)
     {
-        $controllers->post('/tokens', array($this, 'createAction'));
+        //$controllers->post('/tokens', array($this, 'createAction'));
     }
 
+    /*
+     * Request to create a token for a given basic auth.
+     */
     public function createAction(Request $request)
     {
+        
         $this->enforceUserSecurity();
 
         $data = $this->decodeRequestBodyIntoParameters($request);

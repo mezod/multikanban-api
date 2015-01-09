@@ -157,6 +157,28 @@ class UserRepository extends BaseRepository implements UserProviderInterface
 
 
 
+    /**
+     * @param $username
+     * @return User
+     */
+    public function findUserByUsername($username)
+    {
+        return $this->findOneBy(array(
+            'username' => $username
+        ));
+    }
+
+    /**
+     * @param $email
+     * @return User
+     */
+    public function findUserByEmail($email)
+    {
+        return $this->findOneBy(array(
+            'email' => $email
+        ));
+    }
+
     public function loadUserByUsername($username)
     {
         $user = $this->findUserByUsername($username);

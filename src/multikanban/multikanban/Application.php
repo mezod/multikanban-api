@@ -137,7 +137,7 @@ class Application extends SilexApplication
         $app = $this;
 
         $this['repository.user'] = $this->share(function() use ($app) {
-            $repo = new UserRepository($app['db']);
+            $repo = new UserRepository($app['db'], $app['repository_container']);
             $repo->setEncoderFactory($app['security.encoder_factory']);
 
             return $repo;
@@ -193,23 +193,22 @@ class Application extends SilexApplication
             'security.firewalls' => array(
                 'main' => array(
                     'pattern' => '^/',
-                    'form' => true,
                     'users' => $this->share(function () use ($app) {
                         return $app['repository.user'];
                     }),
                     'anonymous' => true,
                     'logout' => true,
                     'stateless' => true,
-                    'http' => true,
                     'api_token' => true,
-                ),
+                    'http' => true
+                )
             )
         ));
 
         // require login for application management
         $this['security.access_rules'] = array(
             // allow anonymous API - if auth is needed, it's handled in the controller
-            array('^/', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+            array('^/', 'IS_AUTHENTICATED_ANONYMOUSLY')
         );
 
         // setup our custom API token authentication

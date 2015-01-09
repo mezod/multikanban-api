@@ -83,6 +83,14 @@ abstract class BaseController implements ControllerProviderInterface
     }
 
     /**
+     * @return ApiTokenRepository
+     */
+    protected function getApiTokenRepository()
+    {
+        return $this->container['repository.api_token'];
+    }
+
+    /**
      * Is the current user logged in?
      *
      * @return boolean

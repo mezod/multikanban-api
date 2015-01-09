@@ -32,7 +32,6 @@ class User implements UserInterface
     public $username;
 
     /**
-     * @Assert\NotBlank(message="Password cannot be empty.")
      * @Assert\Length(
      *      min = 8,
      *      max = 26,

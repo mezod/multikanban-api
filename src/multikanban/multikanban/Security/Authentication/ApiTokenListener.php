@@ -62,6 +62,7 @@ class ApiTokenListener implements ListenerInterface
         if ($returnValue instanceof TokenInterface) {
             return $this->securityContext->setToken($returnValue);
         }
+
     }
 
     /**
