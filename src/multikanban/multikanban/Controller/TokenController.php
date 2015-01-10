@@ -12,6 +12,8 @@ class TokenController extends BaseController
     protected function addRoutes(ControllerCollection $controllers)
     {
         //$controllers->post('/tokens', array($this, 'createAction'));
+        $controllers->get('/tokens', array($this, 'getAction'));
+
     }
 
     /*
@@ -35,5 +37,17 @@ class TokenController extends BaseController
         $this->getApiTokenRepository()->save($token);
 
         return $this->createApiResponse($token, 201);
+    }
+
+    /*
+     * Get the token of a user by a given basic auth
+     */
+    public function getAction(){
+
+        $this->enforceUserSecurity();
+
+        $token = $this->getApiTokenRepository()->findOneById($this->getLoggedInUser()->id);
+
+        return $this->createApiResponse($token, 200);
     }
 }

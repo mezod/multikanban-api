@@ -38,6 +38,12 @@ class ApiTokenRepository extends BaseRepository
         $this->normalizeDateProperty('createdAt', $obj);
     }
 
+
+    public function findOneById($id)
+    {
+        return $this->findOneBy(array('user_id' => $id));
+    }
+
     /**
      * Overridden to create our ApiToken even though it has a constructor arg
      *

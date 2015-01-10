@@ -43,6 +43,7 @@ class UserController extends BaseController{
 
         $newUser = $this->getUserRepository()->findOneByUsername($user->username);
 
+        $this->newToken($newUser->id);
         // $token = $this->newToken($newUser->id);
         // $newUser->token = $token;
 
