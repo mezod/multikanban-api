@@ -16,7 +16,6 @@ use multikanban\multikanban\Repository\UserRepository;
 use multikanban\multikanban\Repository\KanbanRepository;
 use multikanban\multikanban\Repository\TaskRepository;
 use multikanban\multikanban\Repository\StatsRepository;
-use multikanban\multikanban\Security\Token\ApiTokenRepository;
 use multikanban\multikanban\Repository\RepositoryContainer;
 use Doctrine\Common\Annotations\AnnotationReader;
 use multikanban\multikanban\Validator\ApiValidator;
@@ -151,16 +150,12 @@ class Application extends SilexApplication
         $this['repository.stats'] = $this->share(function() use ($app) {
             return new StatsRepository($app['db'], $app['repository_container']);
         });
-        $this['repository.api_token'] = $this->share(function() use ($app) {
-            return new ApiTokenRepository($app['db'], $app['repository_container']);
-        });
         $this['repository_container'] = $this->share(function() use ($app) {
             return new RepositoryContainer($app, array(
                 'user' => 'repository.user',
                 'kanban' => 'repository.kanban',
                 'task' => 'repository.task',
-                'stats' => 'repository.stats',
-                'api_token' => 'repository.api_token',
+                'stats' => 'repository.stats'
             ));
         });
 
@@ -222,7 +217,7 @@ class Application extends SilexApplication
             // the class that looks up the ApiToken object in the database for the given token string
             // and authenticates the user if it's found
             $app['security.authentication_provider.'.$name.'.api_token'] = $app->share(function () use ($app) {
-                return new ApiTokenProvider($app['repository.user'], $app['repository.api_token']);
+                return new ApiTokenProvider($app['repository.user']);
             });
 
             // the class that decides what should happen if no authentication credentials are passed

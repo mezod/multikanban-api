@@ -2,7 +2,6 @@
 
 namespace multikanban\multikanban\Security\Authentication;
 
-use multikanban\multikanban\Security\Token\ApiTokenRepository;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -18,12 +17,9 @@ class ApiTokenProvider implements AuthenticationProviderInterface
 {
     private $userRepository;
 
-    private $apiTokenRepository;
-
-    public function __construct(UserRepository $userRepository, ApiTokenRepository $apiTokenRepository)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->apiTokenRepository = $apiTokenRepository;
     }
 
     /**
@@ -39,17 +35,11 @@ class ApiTokenProvider implements AuthenticationProviderInterface
         // the actual token string value from the header - e.g. ABCDEFG
         $tokenString = $token->getCredentials();
 
-        // find the ApiToken object in the database based on the TokenString
-        $apiToken = $this->apiTokenRepository->findOneByToken($tokenString);
+        // find the user object in the database based on the TokenString
+        $user = $this->userRepository->findOneByToken($tokenString);
 
-        if (!$apiToken) {
-            throw new BadCredentialsException('Invalid token');
-        }
-
-        // look up the user based on the ApiToken.user_id value
-        $user = $this->userRepository->find($apiToken->user_id);
         if (!$user) {
-            throw new \Exception('A token without a user? Some crazy things are happening');
+            throw new BadCredentialsException('Invalid token');
         }
 
         $authenticatedToken = new ApiAuthToken($user->getRoles());

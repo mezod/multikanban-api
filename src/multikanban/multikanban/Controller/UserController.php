@@ -24,6 +24,7 @@ class UserController extends BaseController{
         $controllers->get('/users/{id}', array($this, 'getAction'));
         $controllers->put('/users/{id}', array($this, 'updateAction'));
         $controllers->delete('/users/{id}', array($this, 'deleteAction'));
+        $controllers->get('/tokens', array($this, 'loginAction'));
     }
 
     public function createAction(Request $request){
@@ -35,6 +36,7 @@ class UserController extends BaseController{
     	$user->setPlainPassword($data->get('password'));
     	$user->email = $data->get('email');
         $user->registered = date("Y-m-d");
+        $user->token = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
 
         // Check validation error
         $this->checkValidation($user);
@@ -43,11 +45,7 @@ class UserController extends BaseController{
 
         $newUser = $this->getUserRepository()->findOneByUsername($user->username);
 
-        $this->newToken($newUser->id);
-        // $token = $this->newToken($newUser->id);
-        // $newUser->token = $token;
-
-        return $this->createApiResponse($newUser, 201);
+        return $this->createApiResponse($newUser, 201, 'security');
     }
 
     public function getAllAction(){
@@ -56,7 +54,7 @@ class UserController extends BaseController{
 
         $users = $this->getUserRepository()->findAll();
 
-        return $this->createApiResponse($users, 200);
+        return $this->createApiResponse($users, 200, 'default');
     }
 
     public function getAction($id){
@@ -68,7 +66,7 @@ class UserController extends BaseController{
         // Check not found error
         $this->checkNotFound($user);
 
-        return $this->createApiResponse($user, 200);
+        return $this->createApiResponse($user, 200, 'default');
 
     }
 
@@ -96,7 +94,7 @@ class UserController extends BaseController{
 
         $this->getUserRepository()->update($user, $emailChanged);
 
-        return $this->createApiResponse($user, 200);
+        return $this->createApiResponse($user, 200, 'default');
     }
 
     public function deleteAction($id){
@@ -113,14 +111,15 @@ class UserController extends BaseController{
         return new Response(null, 204);
     }
 
+    /*
+     * Get the token of a user by a given basic auth
+     */
+    public function loginAction(){
 
-    public function newToken($user_id)
-    {
-        $token = new ApiToken($user_id);
-        $token->notes = "default";
+        $this->enforceUserSecurity();
 
-        $this->getApiTokenRepository()->save($token);
+        $token = $this->getUserRepository()->findOneById($this->getLoggedInUser()->id);
 
-        return $token->token;
+        return $this->createApiResponse($token, 200, 'security');
     }
 }

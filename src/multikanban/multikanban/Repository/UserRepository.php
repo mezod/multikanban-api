@@ -226,4 +226,13 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         // compute the encoded password for foo
         return $encoder->encodePassword($password, $user->getSalt());
     }
+
+    /**
+     * @param $token
+     * @return User
+     */
+    public function findOneByToken($token)
+    {
+        return $this->findOneBy(array('token' => $token));
+    }
 }

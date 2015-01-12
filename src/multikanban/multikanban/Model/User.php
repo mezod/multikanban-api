@@ -6,17 +6,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 
-/**
- * @Serializer\ExclusionPolicy("all")
- */
+
 class User implements UserInterface
 {
 
     /* All public properties are persisted */
 
-    /**
-     * @Serializer\Expose()
-     */
+    /** @Serializer\Groups({"default", "security"}) */
     public $id;
 
     /**
@@ -27,18 +23,10 @@ class User implements UserInterface
      *      minMessage = "The username must be at least {{ limit }} characters long",
      *      maxMessage = "The username cannot be longer than {{ limit }} characters long"
      * )
-     * @Serializer\Expose()
+     * @Serializer\Groups({"default", "security"})
      */
     public $username;
 
-    /**
-     * @Assert\Length(
-     *      min = 8,
-     *      max = 26,
-     *      minMessage = "The password must be at least {{ limit }} characters long",
-     *      maxMessage = "The password cannot be longer than {{ limit }} characters long"
-     * )
-     */
     public $password;
 
     /**
@@ -47,14 +35,19 @@ class User implements UserInterface
      *     message = "The email '{{ value }}' is not a valid email.",
      *     checkMX = true
      * )
-     * @Serializer\Expose()
+     * @Serializer\Groups({"default", "security"})
      */
     public $email;
 
     /**
-     * @Serializer\Expose()
+     * @Serializer\Groups({"default", "security"})
      */
     public $registered;
+
+    /**
+     * @Serializer\Groups({"security"})
+     */
+    public $token;
 
     /* non-persisted properties */
     private $plainPassword;

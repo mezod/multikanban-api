@@ -150,18 +150,19 @@ abstract class BaseController implements ControllerProviderInterface
         } 
     }
 
-    protected function serialize($data){
+    protected function serialize($data, $group){
 
         $serializerContext = new SerializationContext();
-        $serializerContext->setSerializeNull(true);
+        $serializerContext->setSerializeNull(true)
+                          ->setGroups(array($group));
 
         return $this->container['serializer']
             ->serialize($data, 'json', $serializerContext);
     }
 
-    protected function createApiResponse($data, $statusCode = 200){
+    protected function createApiResponse($data, $statusCode = 200, $group = "Default"){
 
-        $json = $this->serialize($data);
+        $json = $this->serialize($data, $group);
 
         $response = new Response($json, $statusCode, array(
             'Content-Type' => 'application/json'
