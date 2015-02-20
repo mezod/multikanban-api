@@ -50,6 +50,7 @@ Stores and updates information about users' kanban board's tasks.
 | ---- | --------------- | ---- |
 | [POST /users/:id/kanbans/:kanban_id/tasks](#post-tasks) | Create a task in kanban :kanban_id of user :id | yes |
 | [GET /users/:id/kanbans/:kanban_id/tasks](#get-tasks) | Get all tasks from kanban :kanban_id from user :id | yes |
+| [GET /users/:id/kanbans/:kanban_id/tasks/:state](#get-tasks-state) | Get all tasks from kanban :kanban_id from user :id in state :state | yes |
 | [GET /users/:id/completedtasks](#get-completed-tasks) | Get all completed tasks from user :id | yes |
 | [PUT /users/:id/kanbans/:kanban_id/tasks/:task_id](#put-task) | Update task :task_id from kanban :kanban_id from user :id | yes |
 | [DELETE /users/:id/kanbans/:kanban_id/tasks/:task_id](#delete-task) | Delete task :task_id from kanban :kanban_id from user :id | yes |
@@ -406,6 +407,35 @@ Response:
       "position": "0",
       "state": "archive"
     }
+
+#### <a name="get-tasks-state"></a>GET /users/:id/kanbans/:kanban_id/tasks/:state
+
+Get all tasks from kanban :kanban_id from user :id in state :state
+
+Requires authorization via token
+
+Response:
+
+    {
+      "id": "1",
+      "user_id": "1",
+      "kanban_id": "3",
+      "text": "write the abstract",
+      "dateCreated": "31/08/2014",
+      "dateCompleted": null,
+      "position": "0",
+      "state": "backlog"
+    },
+    {
+      "id": "2",
+      "user_id": "1",
+      "kanban_id": "3",
+      "text": "meet supervisor",
+      "dateCreated": "31/08/2014",
+      "dateCompleted": null,
+      "position": "1",
+      "state": "backlog"
+    },
 
 #### <a name="get-completed-tasks"></a>GET /users/:id/completedtasks
 
