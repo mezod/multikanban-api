@@ -54,6 +54,30 @@ class TaskRepository{
         foreach($tasks as $eachTask){
             $task = new Task();
             foreach ($eachTask as $key => $value){
+                if (is_numeric($value)) {
+                    $value = (float) $value;
+                }
+                $task->$key = $value;
+            }
+            array_push($taskArray, $task);
+        }
+
+        return $taskArray;
+    }
+
+    public function findAllByState($kanban_id, $state){
+
+        $sql = "SELECT * FROM task WHERE kanban_id = ? AND state = ?";
+        $tasks = $this->connection->fetchAll($sql, array((int) $kanban_id, $state));
+        
+        $taskArray = array();
+
+        foreach($tasks as $eachTask){
+            $task = new Task();
+            foreach ($eachTask as $key => $value){
+                if (is_numeric($value)) {
+                    $value = (float) $value;
+                }
                 $task->$key = $value;
             }
             array_push($taskArray, $task);
@@ -74,6 +98,9 @@ class TaskRepository{
         foreach($tasks as $eachTask){
             $task = new Task();
             foreach ($eachTask as $key => $value){
+                if (is_numeric($value)) {
+                    $value = (float) $value;
+                }
                 $task->$key = $value;
             }
             array_push($taskArray, $task);
@@ -92,6 +119,9 @@ class TaskRepository{
         $task = new Task();
 
         foreach ($post as $key => $value){
+            if (is_numeric($value)) {
+                $value = (float) $value;
+            }
             $task->$key = $value;
         }
 

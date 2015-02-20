@@ -29,6 +29,7 @@ use multikanban\multikanban\Api\ApiProblemResponseFactory;
 use multikanban\multikanban\Security\Authentication\ApiEntryPoint;
 use multikanban\multikanban\Security\Authentication\ApiTokenListener;
 use multikanban\multikanban\Security\Authentication\ApiTokenProvider;
+use multikanban\multikanban\Security\Http\EntryPoint\BasicAuthenticationEntryPoint;
 
 //Listeners
 use multikanban\multikanban\Api\ApiProblem;
@@ -235,6 +236,10 @@ class Application extends SilexApplication
                 // the position of the listener in the stack
                 'pre_auth'
             );
+        });
+
+        $this['security.entry_point.main.http'] = $this->share(function() {
+            return new BasicAuthenticationEntryPoint('main');
         });
     }
 

@@ -65,16 +65,23 @@ class UserRepository extends BaseRepository implements UserProviderInterface
 
         $sql = "SELECT * FROM user";
         $users = $this->connection->fetchAll($sql);
+
+        
         
         $userArray = array();
 
         foreach($users as $eachUser){
             $user = new User();
             foreach ($eachUser as $key => $value){
-                $user->$key = $value;
+                if (is_numeric($value)) {
+                    $value = (float) $value;
+                }
+                $user->$key = $value; 
             }
             array_push($userArray, $user);
         }
+
+        //var_dump($userArray);
 
         return $userArray;
     }
@@ -89,6 +96,9 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         $user = new User();
         
         foreach ($post as $key => $value){
+            if (is_numeric($value)) {
+                $value = (float) $value;
+            }
             $user->$key = $value;
         }
         
@@ -103,6 +113,9 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         $user = new User();
 
         foreach ($post as $key => $value){
+            if (is_numeric($value)) {
+                $value = (float) $value;
+            }
             $user->$key = $value;
         }
 

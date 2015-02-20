@@ -19,6 +19,7 @@ class TaskController extends BaseController{
 
     	$controllers->post('/users/{user_id}/kanbans/{kanban_id}/tasks', array($this, 'createAction'));
         $controllers->get('/users/{user_id}/kanbans/{kanban_id}/tasks', array($this, 'getAllAction'));
+        $controllers->get('/users/{user_id}/kanbans/{kanban_id}/tasks/{state}', array($this, 'getByStateAction'));
         $controllers->get('/users/{user_id}/completedtasks', array($this, 'getCompletedAction'));
         $controllers->put('/users/{user_id}/kanbans/{kanban_id}/tasks/{id}', array($this, 'updateAction'));
         $controllers->delete('/users/{user_id}/kanbans/{kanban_id}/tasks/{id}', array($this, 'deleteAction'));
@@ -58,9 +59,18 @@ class TaskController extends BaseController{
         $this->checkNotFound($kanban);
         $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id);
 
-        $this->enforceUserOwnershipSecurity($user_id);
-
         $tasks = $this->getTaskRepository()->findAll($kanban_id);
+
+        return $this->createApiResponse($tasks, 200);
+    }
+
+    public function getByStateAction($user_id, $kanban_id, $state){
+
+        $kanban = $this->getKanbanRepository()->findOneById($kanban_id);
+        $this->checkNotFound($kanban);
+        $this->enforceUserOwnershipSecurity($user_id, $kanban->user_id);
+
+        $tasks = $this->getTaskRepository()->findAllByState($kanban_id, $state);
 
         return $this->createApiResponse($tasks, 200);
     }

@@ -120,6 +120,9 @@ class UserController extends BaseController{
 
         $token = $this->getUserRepository()->findOneById($this->getLoggedInUser()->id);
 
-        return $this->createApiResponse($token, 200, 'security');
+        $response = $this->createApiResponse($token, 200, 'security');
+        //$response->headers->set('WWW-Authenticate', 'FormBased');
+
+        return $response;
     }
 }

@@ -32,17 +32,17 @@ class KanbanController extends BaseController{
     	$data = $this->decodeRequestBodyIntoParameters($request);
 
     	$kanban = new Kanban();
-    	$kanban->user_id = $user_id;
+    	$kanban->user_id = (float) $user_id;
     	$kanban->title = $data->get('title');
         $kanban->slug = Util::slugify($data->get('title'));
     	$kanban->dateCreated = date("Y-m-d");
     	$kanban->lastEdited = $kanban->dateCreated;
-    	$kanban->position = $this->getKanbanRepository()->getKanbanPosition($user_id);
+    	$kanban->position = (float) $this->getKanbanRepository()->getKanbanPosition($user_id);
 
         // Check validation error
         $this->checkValidation($kanban);
 
-    	$kanban->id = $this->getKanbanRepository()->save($kanban);
+    	$kanban->id = (float) $this->getKanbanRepository()->save($kanban);
 
         return $this->createApiResponse($kanban, 201);
     }

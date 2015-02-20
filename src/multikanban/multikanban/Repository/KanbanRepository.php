@@ -55,6 +55,9 @@ class KanbanRepository{
         foreach($kanbans as $eachKanban){
             $kanban = new Kanban();
             foreach ($eachKanban as $key => $value){
+                if (is_numeric($value)) {
+                    $value = (float) $value;
+                }
                 $kanban->$key = $value;
             }
             array_push($kanbanArray, $kanban);
@@ -73,6 +76,9 @@ class KanbanRepository{
         $kanban = new Kanban();
 
         foreach ($post as $key => $value){
+            if (is_numeric($value)) {
+                $value = (float) $value;
+            }
             $kanban->$key = $value;
         }
 
