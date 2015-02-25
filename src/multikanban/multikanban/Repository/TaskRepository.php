@@ -40,7 +40,7 @@ class TaskRepository{
 
     public function increaseBacklogPosition($kanban_id){
 
-        $sql = "UPDATE task SET position = position + 1 WHERE kanban_id = ?";
+        $sql = "UPDATE task SET position = position + 1 WHERE kanban_id = ? AND state = 'backlog'";
         $this->connection->executeQuery($sql, array((int) $kanban_id));
     }
 
@@ -152,11 +152,11 @@ class TaskRepository{
             $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $newPosition, $newState));
         }else{
             if($oldPosition < $newPosition){
-                $sql = "UPDATE task SET position = position - 1 WHERE kanban_id = ? AND position > ? AND position <= ?";
-                $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $oldPosition, (int) $newPosition));
+                $sql = "UPDATE task SET position = position - 1 WHERE kanban_id = ? AND position > ? AND position <= ? AND state = ?";
+                $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $oldPosition, (int) $newPosition, $newState));
             }else{
-                $sql = "UPDATE task SET position = position + 1 WHERE kanban_id = ? AND position < ? AND position >= ?";
-                $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $oldPosition, (int) $newPosition));
+                $sql = "UPDATE task SET position = position + 1 WHERE kanban_id = ? AND position < ? AND position >= ? AND state = ?";
+                $this->connection->executeQuery($sql, array((int) $kanban_id, (int) $oldPosition, (int) $newPosition, $newState));
             }  
         }
     }
