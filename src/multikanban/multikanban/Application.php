@@ -116,7 +116,7 @@ class Application extends SilexApplication
         // configure validation to load from a YAML file
         $this['validator.mapping.class_metadata_factory'] = $this->share(function() use ($app) {
             return new ClassMetadataFactory(
-                new AnnotationLoader($this['annotation_reader'])
+                new AnnotationLoader($app['annotation_reader'])
             );
         });
 
@@ -124,11 +124,11 @@ class Application extends SilexApplication
         $this->register(new TranslationServiceProvider(), array(
             'locale_fallbacks' => array('en'),
         ));
-        $this['translator'] = $this->share($this->extend('translator', function($translator) {
+        $this['translator'] = $this->share($this->extend('translator', function($translator) use ($app) {
             /** @var \Symfony\Component\Translation\Translator $translator */
             $translator->addLoader('yaml', new YamlFileLoader());
 
-            $translator->addResource('yaml', $this['root_dir'].'/translations/en.yml', 'en');
+            $translator->addResource('yaml', $app['root_dir'].'/translations/en.yml', 'en');
 
             return $translator;
         }));
