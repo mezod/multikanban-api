@@ -98,6 +98,8 @@ class Application extends SilexApplication
 
     private function configureProviders()
     {
+        $app = $this;
+
         // Doctrine DBAL
         $this->register(new DoctrineServiceProvider(), array(
             'db.options' => array(
@@ -112,7 +114,7 @@ class Application extends SilexApplication
         // Validation
         $this->register(new ValidatorServiceProvider());
         // configure validation to load from a YAML file
-        $this['validator.mapping.class_metadata_factory'] = $this->share(function() {
+        $this['validator.mapping.class_metadata_factory'] = $this->share(function() use ($app) {
             return new ClassMetadataFactory(
                 new AnnotationLoader($this['annotation_reader'])
             );
