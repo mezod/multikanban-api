@@ -66,8 +66,6 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         $sql = "SELECT * FROM user";
         $users = $this->connection->fetchAll($sql);
 
-        
-        
         $userArray = array();
 
         foreach($users as $eachUser){

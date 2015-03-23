@@ -45,6 +45,8 @@ class UserController extends BaseController{
 
         $newUser = $this->getUserRepository()->findOneByUsername($user->username);
 
+        $this->initialLoad($newUser);
+
         return $this->createApiResponse($newUser, 201, 'security');
     }
 
