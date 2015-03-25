@@ -117,6 +117,9 @@ class TaskController extends BaseController{
         // Check validation error
         $this->checkValidation($task);
 
+        // Update kanbans last edited date
+        $this->getKanbanRepository()->updateLastEditedDate($kanban);
+
         if($positionOrStateChanged) $this->getTaskRepository()->updatePositions($kanban_id, $oldPosition, $task->position, $oldState, $task->state);
         $this->getTaskRepository()->update($task);
 

@@ -116,4 +116,10 @@ class KanbanRepository{
         $sql = "UPDATE kanban SET position = position - 1 WHERE user_id = ? AND position > ?";
         $this->connection->executeQuery($sql, array((int) $user_id, (int) $position));
     }
+
+    public function updateLastEditedDate($kanban){
+
+        $sql = "UPDATE kanban SET lastEdited = ? WHERE id = ?";
+        $this->connection->executeQuery($sql, array( date("Y-m-d"), (int) $kanban->id));
+    }
 }
